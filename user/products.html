@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản Phẩm - ProMax Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #87CEEB;
+        }
+        
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-img:hover {
+            transform: rotate(10deg) scale(1.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+        
+        .navbar {
+            background-color: rgba(44, 62, 80, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: #2c3e50;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-link {
+            position: relative;
+            padding: 14px 24px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .nav-link:hover::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 2px;
+            background-color: #fff;
+        }
+        
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -340px;
+            width: 340px;
+            height: 100%;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"%3E%3Cpath d="M20 0 Q30 10 20 20 Q10 30 20 40 Q30 30 40 20 Q30 10 20 0 Z"/%3E%3C/svg%3E');
+            background-color: #2c3e50;
+            transition: left 0.4s ease, transform 0.4s ease;
+            z-index: 1000;
+            padding: 40px 24px;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .drawer.active {
+            left: 0;
+            transform: scale(1.02);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease;
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-input {
+            width: 0;
+            opacity: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input.active {
+            width: 300px;
+            opacity: 1;
+            padding: 8px 16px;
+        }
+        
+        .footer {
+            background-color: #1F2937;
+            transition: background-color 0.3s ease;
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .button {
+            transition: all 0.3s ease;
+        }
+        
+        .input-field {
+            transition: all 0.2s ease;
+        }
+        
+        .input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        @keyframes slideInLink {
+            from { transform: translateX(-30px) scale(0.95); opacity: 0; }
+            to { transform: translateX(0) scale(1); opacity: 1; }
+        }
+        
+        @keyframes slideInIcon {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .drawer.active .nav-link {
+            animation: slideInLink 0.4s ease forwards;
+        }
+        .drawer.active .nav-link:nth-child(1) { animation-delay: 0.1s; }
+        .drawer.active .nav-link:nth-child(2) { animation-delay: 0.2s; }
+        .drawer.active .nav-link:nth-child(3) { animation-delay: 0.3s; }
+        .drawer.active .nav-link:nth-child(4) { animation-delay: 0.4s; }
+        .drawer.active .nav-link:nth-child(5) { animation-delay: 0.5s; }
+        .drawer.active .nav-link:nth-child(6) { animation-delay: 0.6s; }
+        .drawer.active .nav-link:nth-child(7) { animation-delay: 0.7s; }
+        .drawer.active .nav-link:nth-child(8) { animation-delay: 0.8s; }
+        
+        .navbar .menu-toggle, .navbar .fa-search, .navbar .fa-shopping-bag {
+            animation: slideInIcon 0.6s ease forwards;
+        }
+        .navbar .menu-toggle { animation-delay: 0.2s; }
+        .navbar .fa-search { animation-delay: 0.4s; }
+        .navbar .fa-shopping-bag { animation-delay: 0.5s; }
+        
+        @media (max-width: 768px) {
+            .search-input.active {
+                width: 100%;
+            }
+            .product-card img {
+                width: 100%;
+                max-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar text-white py-6 px-12 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-10">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                <span class="font-bold text-3xl">ProMax Store</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="search-container">
+                    <i class="fas fa-search hover:text-gray-300 cursor-pointer text-xl" id="search-toggle"></i>
+                    <input type="text" id="search-input" class="search-input bg-gray-800 border border-gray-700 rounded-full text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tìm kiếm iPhone...">
+                </div>
+                <a href="cart.html"><i class="fas fa-shopping-bag hover:text-gray-300 cursor-pointer text-xl"></i></a>
+            </div>
+        </div>
+        <!-- Drawer Menu -->
+        <div class="drawer" id="drawer">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between mb-10">
+                    <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                    <button class="text-white" id="close-drawer">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col space-y-6 flex-grow">
+                    <a href="user-home.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-home mr-3"></i>Trang Chủ</a>
+                    <a href="products.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-mobile-alt mr-3"></i>Sản Phẩm</a>
+                    <a href="index.html#features" class="nav-link text-white hover:text-gray-200"><i class="fas fa-star mr-3"></i>Tính Năng</a>
+                    <a href="index.html#contact" class="nav-link text-white hover:text-gray-200"><i class="fas fa-envelope mr-3"></i>Liên Hệ</a>
+                    <a href="profile.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-user mr-3"></i>Thông Tin Tài Khoản</a>
+                    <a href="order-history.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-history mr-3"></i>Lịch Sử Đơn Hàng</a>
+                    <a href="order-tracking.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-truck mr-3"></i>Theo Dõi Đơn Hàng</a>
+                    <a href="logout.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-sign-out-alt mr-3"></i>Đăng Xuất</a>
+                </div>
+            </div>
+        </div>
+        <div class="overlay" id="overlay"></div>
+    </nav>
+
+    <!-- Products Section -->
+    <section id="products" class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Sản Phẩm</h2>
+            <div class="mb-8 flex justify-center">
+                <select id="product-filter" class="input-field w-full md:w-1/4 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none">
+                    <option value="all">Tất cả</option>
+                    <option value="11-pro-max">iPhone 11 Pro Max</option>
+                    <option value="12-pro-max">iPhone 12 Pro Max</option>
+                    <option value="13-pro-max">iPhone 13 Pro Max</option>
+                    <option value="14-pro-max">iPhone 14 Pro Max</option>
+                    <option value="15-pro-max">iPhone 15 Pro Max</option>
+                    <option value="16-pro-max">iPhone 16 Pro Max</option>
+                </select>
+            </div>
+            <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Product cards will be populated dynamically -->
+            </div>
+            <div id="empty-product-message" class="text-center text-gray-600 mt-8 hidden">Không tìm thấy sản phẩm nào.</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer bg-gray-900 text-white py-6">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="w-10 h-10 object-contain">
+                <span class="font-bold text-xl">ProMax Store</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <div class="flex space-x-6 text-xl mb-4">
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="text-sm text-gray-400">
+                    <p>&copy; 2025 ProMax Store. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const closeDrawer = document.getElementById('close-drawer');
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('overlay');
+            const searchToggle = document.getElementById('search-toggle');
+            const searchInput = document.getElementById('search-input');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const navbar = document.querySelector('.navbar');
+            const productFilter = document.getElementById('product-filter');
+            const productListContainer = document.getElementById('product-list');
+            const emptyProductMessage = document.getElementById('empty-product-message');
+
+            // Product data
+            const products = [
+                {
+                    id: '11-pro-max',
+                    name: 'iPhone 11 Pro Max',
+                    price: 699, // USD
+                    priceVND: (699 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/11-pro-max-midnight-green.png',
+                    description: 'iPhone 11 Pro Max với chip A13 Bionic, hệ thống 3 camera 12MP, và màn hình Super Retina XDR 6.5 inch.',
+                    colors: ['Midnight Green', 'Space Gray', 'Silver', 'Gold'],
+                    storage: ['64GB', '256GB', '512GB']
+                },
+                {
+                    id: '12-pro-max',
+                    name: 'iPhone 12 Pro Max',
+                    price: 799, // USD
+                    priceVND: (799 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/12-pro-max-pacific-blue.png',
+                    description: 'iPhone 12 Pro Max với chip A14 Bionic, hệ thống 3 camera 12MP, và màn hình Super Retina XDR 6.7 inch.',
+                    colors: ['Pacific Blue', 'Gold', 'Graphite', 'Silver'],
+                    storage: ['128GB', '256GB', '512GB']
+                },
+                {
+                    id: '13-pro-max',
+                    name: 'iPhone 13 Pro Max',
+                    price: 899, // USD
+                    priceVND: (899 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/13-pro-max-sierra-blue.png',
+                    description: 'iPhone 13 Pro Max với chip A15 Bionic, hệ thống 3 camera 12MP, và màn hình Super Retina XDR 6.7 inch.',
+                    colors: ['Sierra Blue', 'Graphite', 'Silver', 'Gold'],
+                    storage: ['128GB', '256GB', '512GB', '1TB']
+                },
+                {
+                    id: '14-pro-max',
+                    name: 'iPhone 14 Pro Max',
+                    price: 899, // USD
+                    priceVND: (899 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/14-pro-max-deep-purple.png',
+                    description: 'iPhone 14 Pro Max với chip A16 Bionic, hệ thống 3 camera 48MP, và Dynamic Island.',
+                    colors: ['Deep Purple', 'Space Black', 'Silver', 'Gold'],
+                    storage: ['128GB', '256GB', '512GB', '1TB']
+                },
+                {
+                    id: '15-pro-max',
+                    name: 'iPhone 15 Pro Max',
+                    price: 1099, // USD
+                    priceVND: (1099 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/15-pro-max-blue-titanium.png',
+                    description: 'iPhone 15 Pro Max với chip A17 Pro, khung titan, và camera 48MP.',
+                    colors: ['Black Titanium', 'White Titanium', 'Blue Titanium', 'Natural Titanium'],
+                    storage: ['256GB', '512GB', '1TB']
+                },
+                {
+                    id: '16-pro-max',
+                    name: 'iPhone 16 Pro Max',
+                    price: 1199, // USD
+                    priceVND: (1199 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/16-pro-max-desert-titanium.png',
+                    description: 'iPhone 16 Pro Max với chip A18 Pro, camera 48MP Ultra Wide, và màn hình 6.9 inch.',
+                    colors: ['Black Titanium', 'White Titanium', 'Natural Titanium', 'Desert Titanium'],
+                    storage: ['256GB', '512GB', '1TB']
+                }
+            ];
+
+            // Drawer menu toggle
+            menuToggle.addEventListener('click', () => {
+                drawer.classList.add('active');
+                overlay.classList.add('active');
+            });
+            
+            closeDrawer.addEventListener('click', () => {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            overlay.addEventListener('click', () => {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    drawer.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            });
+
+            // Search input toggle
+            searchToggle.addEventListener('click', () => {
+                searchInput.classList.toggle('active');
+                if (searchInput.classList.contains('active')) {
+                    searchInput.focus();
+                }
+            });
+
+            // Scroll effect for navbar
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Function to update product list
+            function updateProductList() {
+                productListContainer.innerHTML = '';
+                const filterValue = productFilter.value;
+
+                const filteredProducts = products.filter(product => {
+                    return filterValue === 'all' || product.id === filterValue;
+                });
+
+                if (filteredProducts.length === 0) {
+                    emptyProductMessage.classList.remove('hidden');
+                    return;
+                }
+
+                emptyProductMessage.classList.add('hidden');
+
+                filteredProducts.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card bg-white rounded-xl shadow-lg p-6 flex flex-col items-center';
+                    productCard.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}" class="w-32 h-32 object-contain mb-4">
+                        <h3 class="text-lg font-bold text-center">${product.name}</h3>
+                        <p class="text-gray-600 text-center">${product.description}</p>
+                        <p class="text-gray-800 font-semibold mt-2">${product.priceVND} ₫</p>
+                        <div class="flex gap-2 mt-4">
+                            <a href="product-details.html?id=${product.id}" class="button bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-full transition">Xem chi tiết</a>
+                            <a href="cart.html?id=${product.id}" class="button bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full transition buy-now" data-id="${product.id}">Mua Ngay</a>
+                        </div>
+                    `;
+                    productListContainer.appendChild(productCard);
+                });
+            }
+
+            // Initial product list update
+            updateProductList();
+
+            // Filter event listener
+            productFilter.addEventListener('change', updateProductList);
+        });
+    </script>
+</body>
+</html>

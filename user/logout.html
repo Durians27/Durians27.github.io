@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Xuất - ProMax Store</title>
+    <!-- Tải Tailwind CSS từ CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tải Font Awesome cho các biểu tượng -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #2c3e50 100%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header .logo img {
+            width: 80px;
+            height: auto;
+        }
+
+        header nav a {
+            color: #fff;
+            margin-left: 1.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        header nav a:hover {
+            color: #5c97d6;
+        }
+
+        /* Container chính */
+        .container {
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+                        0 10px 10px rgba(0,0,0,0.22);
+            width: 600px;
+            max-width: 90%;
+            margin: 2rem auto;
+            padding: 2rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        .container h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .container p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: 20px;
+            border: 1px solid #5c97d6;
+            background: linear-gradient(to right, #5c97d6, #3b74b1);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 12px 30px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 15px rgba(92, 151, 214, 0.8);
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .container h1 {
+                font-size: 1.5rem;
+            }
+
+            .container p {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="../images/logo1.png" alt="ProMax Store Logo">
+        </div>
+        <nav>
+            <a href="user-home.html">Trang Chủ</a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h1>Đăng Xuất Thành Công</h1>
+        <p>Bạn đã đăng xuất khỏi tài khoản của mình. Bạn sẽ được chuyển hướng về trang đăng nhập trong <span id="countdown">3</span> giây.</p>
+        <button class="btn" id="redirectLogin">Quay Lại Đăng Nhập</button>
+    </div>
+
+    <script>
+        // Clear user data from localStorage
+        localStorage.removeItem('user');
+
+        // Countdown and redirect
+        let countdown = 3;
+        const countdownElement = document.getElementById('countdown');
+        const redirectLoginBtn = document.getElementById('redirectLogin');
+
+        const timer = setInterval(() => {
+            countdown--;
+            countdownElement.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(timer);
+                window.location.href = 'login.html';
+            }
+        }, 1000);
+
+        // Manual redirect button
+        redirectLoginBtn.addEventListener('click', () => {
+            clearInterval(timer);
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

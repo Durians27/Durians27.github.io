@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập/Đăng Ký - ProMax Store</title>
+    <!-- Tải Tailwind CSS từ CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tải Font Awesome cho các biểu tượng -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    /* Tải font Inter từ Google Fonts để đồng bộ với tệp gốc */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #000000 0%, #2c3e50 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    /* Container chính cho toàn bộ trang đăng nhập/đăng ký */
+    .container {
+        background-color: rgba(255, 255, 255, 0.15); /* Nền trắng trong suốt */
+        backdrop-filter: blur(10px); /* Hiệu ứng làm mờ nền */
+        border-radius: 10px;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+                    0 10px 10px rgba(0,0,0,0.22);
+        position: relative;
+        overflow: hidden;
+        width: 1400px;
+        max-width: 95%; 
+        min-height: 850px;
+    }
+
+    /* Các kiểu form chung */
+    .form-container {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 50%;
+        transition: all 0.6s ease-in-out;
+        padding: 5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background-color: transparent;
+    }
+
+    /* Form đăng ký: ban đầu nằm bên trái và ẩn */
+    .form-container.sign-up-container {
+        left: 0;
+        opacity: 0;
+        z-index: 1;
+    }
+
+    /* Form đăng nhập: ban đầu nằm bên trái và hiển thị */
+    .form-container.sign-in-container {
+        left: 0;
+        opacity: 1;
+        z-index: 2;
+    }
+
+    /* Hiệu ứng khi container có class 'right-panel-active' */
+    .container.right-panel-active .sign-in-container {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    .container.right-panel-active .sign-up-container {
+        transform: translateX(100%);
+        opacity: 1;
+        z-index: 5;
+        animation: show 0.6s;
+    }
+
+    /* Keyframes cho hiệu ứng hiển thị */
+    @keyframes show {
+        0%, 49.99% {
+            opacity: 0;
+            z-index: 1;
+        }
+        50%, 100% {
+            opacity: 1;
+            z-index: 5;
+        }
+    }
+
+    /* Hiệu ứng hoạt ảnh cho ô nhập liệu */
+    .form-container input {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        padding: 18px 22px;
+        margin: 14px 0;
+        width: 100%;
+        border-radius: 5px;
+        color: #fff;
+        text-align: left;
+    }
+
+    .form-container input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+        text-align: left;
+    }
+    
+    /* Nút chính trong form */
+    .form-container button {
+        border-radius: 20px;
+        border: 1px solid #5c97d6; 
+        background: linear-gradient(to right, #5c97d6, #3b74b1);
+        color: #FFFFFF;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 18px 65px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    /* Hiệu ứng hover mới cho nút chính */
+    .form-container button:hover {
+        box-shadow: 0 0 15px rgba(92, 151, 214, 0.8);
+        transform: scale(1.05);
+    }
+    
+    .form-container button:active {
+        transform: scale(0.95);
+    }
+    
+    /* Nút chuyển đổi trong overlay */
+    .overlay-button {
+        border-radius: 20px;
+        border: 1px solid #0a4d8c;
+        background-color: #0a4d8c;
+        color: #FFFFFF;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 18px 65px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-top: 1.5rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    /* Hiệu ứng hover mới cho nút chuyển đổi */
+    .overlay-button:hover {
+        box-shadow: 0 0 15px rgba(10, 77, 140, 0.8);
+        transform: scale(1.05);
+    }
+
+    .overlay-button:active {
+        transform: scale(0.95);
+    }
+
+    /* Container overlay (phần còn lại) */
+    .overlay-container {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        transition: transform 0.6s ease-in-out;
+        z-index: 100;
+    }
+
+    .container.right-panel-active .overlay-container {
+        transform: translateX(-100%);
+    }
+
+    /* Nội dung bên trong overlay */
+    .overlay {
+        background: linear-gradient(to right, rgba(92, 151, 214, 0.8), rgba(59, 116, 177, 0.8));
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 0 0;
+        color: #FFFFFF;
+        position: relative;
+        left: -100%;
+        height: 100%;
+        width: 200%;
+        transform: translateX(0);
+        transition: transform 0.6s ease-in-out;
+    }
+    
+    .container.right-panel-active .overlay {
+        transform: translateX(50%);
+    }
+
+    /* Các panel bên trong overlay */
+    .overlay-panel {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 40px;
+        text-align: center;
+        top: 0;
+        height: 100%;
+        width: 50%;
+        transform: translateX(0);
+        transition: transform 0.6s ease-in-out;
+    }
+
+    /* Panel overlay bên trái (cho đăng nhập) */
+    .overlay-left {
+        transform: translateX(-20%);
+    }
+
+    .container.right-panel-active .overlay-left {
+        transform: translateX(0);
+    }
+
+    /* Panel overlay bên phải (cho đăng ký) */
+    .overlay-right {
+        right: 0;
+        transform: translateX(0);
+    }
+
+    .container.right-panel-active .overlay-right {
+        transform: translateX(20%);
+    }
+    
+    /* Đảm bảo các biểu tượng mạng xã hội được căn giữa và có kích thước phù hợp */
+    .social-link {
+        transition: transform 0.3s ease;
+    }
+    
+    .social-link:hover {
+        transform: scale(1.2);
+    }
+
+    /* Kiểu mới để làm logo nhỏ lại */
+    .overlay-panel img {
+        width: 100px; /* Kích thước logo nhỏ hơn */
+        height: auto; /* Giữ tỉ lệ */
+    }
+</style>
+</head>
+<body>
+
+<div class="container" id="container">
+    <!-- Form Đăng Ký -->
+    <div class="form-container sign-up-container">
+        <form action="#">
+            <h1 class="font-bold text-5xl text-white">Tạo tài khoản</h1>
+            <div class="social-container my-5 flex justify-center space-x-2">
+                <a href="#" class="social-link border rounded-full inline-flex justify-center items-center h-16 w-16 mx-1 border-gray-300">
+                    <i class="fab fa-facebook-f text-3xl text-blue-600"></i>
+                </a>
+                <a href="#" class="social-link border rounded-full inline-flex justify-center items-center h-16 w-16 mx-1 border-gray-300">
+                    <i class="fab fa-google text-3xl text-red-500"></i>
+                </a>
+                <a href="#" class="social-link border rounded-full inline-flex justify-center items-center h-16 w-16 mx-1 border-gray-300">
+                    <i class="fab fa-apple text-3xl text-gray-800"></i>
+                </a>
+            </div>
+            <span class="text-base text-white">hoặc sử dụng email để đăng ký</span>
+            <input type="text" placeholder="Họ và Tên" required />
+            <input type="email" placeholder="Email" required />
+            <input type="password" placeholder="Mật khẩu" required />
+            <!-- Trường mới: Số điện thoại -->
+            <input type="tel" placeholder="Số điện thoại" required />
+            <!-- Trường mới: Xác nhận mật khẩu -->
+            <input type="password" placeholder="Xác nhận mật khẩu" required />
+            <!-- Checkbox để đồng ý với điều khoản -->
+            <!-- Đã chỉnh sửa để checkbox và label gần nhau hơn -->
+            <div class="flex items-center w-full my-2">
+                <input type="checkbox" id="terms" class="h-4 w-4" required />
+                <label for="terms" class="text-base text-white text-left ml-1">Tôi đồng ý với <a href="#" class="text-blue-400 hover:underline">Điều khoản dịch vụ</a> và <a href="#" class="text-blue-400 hover:underline">Chính sách Bảo mật</a></label>
+            </div>
+            <button class="mt-3">Đăng ký</button>
+        </form>
+    </div>
+    
+    <!-- Form Đăng Nhập -->
+    <div class="form-container sign-in-container">
+        <form id="signInForm" action="#">
+            <h1 class="font-bold text-5xl text-white">Đăng nhập</h1>
+            <div class="social-container my-5 flex justify-center space-x-2">
+                <a href="#" class="social-link border rounded-full inline-flex justify-center items-center h-16 w-16 mx-1 border-gray-300">
+                    <i class="fab fa-facebook-f text-3xl text-blue-600"></i>
+                </a>
+                <a href="#" class="social-link border rounded-full inline-flex justify-center items-center h-16 w-16 mx-1 border-gray-300">
+                    <i class="fab fa-google text-3xl text-red-500"></i>
+                </a>
+                <a href="#" class="social-link border rounded-full inline-flex justify-center items-center h-16 w-16 mx-1 border-gray-300">
+                    <i class="fab fa-apple text-3xl text-gray-800"></i>
+                </a>
+            </div>
+            <span class="text-base text-white">hoặc sử dụng tài khoản của bạn</span>
+            <input type="email" id="signInEmail" placeholder="Email" required />
+            <input type="password" id="signInPassword" placeholder="Mật khẩu" required />
+            <a href="#" class="text-base mt-3 text-white">Quên mật khẩu của bạn?</a>
+            <button class="mt-3" type="submit">Đăng nhập</button>
+        </form>
+    </div>
+    
+    <!-- Phần Overlay -->
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <!-- Logo cho panel bên trái -->
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="mb-4">
+                <h1 class="font-bold text-5xl">Chào mừng trở lại!</h1>
+                <p class="text-xl my-5 mx-1">Để kết nối với chúng tôi, vui lòng đăng nhập bằng thông tin cá nhân của bạn</p>
+                <!-- Nút chuyển đổi sang form đăng nhập -->
+                <button class="overlay-button" id="signIn">Đăng nhập</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <!-- Logo cho panel bên phải -->
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="mb-4">
+                <h1 class="font-bold text-5xl">Chào bạn!</h1>
+                <p class="text-xl my-5 mx-1">Hãy nhập thông tin cá nhân của bạn và bắt đầu hành trình với chúng tôi</p>
+                <!-- Nút chuyển đổi sang form đăng ký -->
+                <button class="overlay-button" id="signUp">Đăng ký</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const signUpButton = document.getElementById('signUp');
+    const signInButton = document.getElementById('signIn');
+    const container = document.getElementById('container');
+    const signInForm = document.getElementById('signInForm');
+    const signInEmail = document.getElementById('signInEmail');
+    const signInPassword = document.getElementById('signInPassword');
+
+    // Toggle between login and signup forms
+    signUpButton.addEventListener('click', () => {
+        container.classList.add("right-panel-active");
+    });
+
+    signInButton.addEventListener('click', () => {
+        container.classList.remove("right-panel-active");
+    });
+
+    // Mock login validation and redirect
+    signInForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = signInEmail.value;
+        const password = signInPassword.value;
+
+        // Mock validation (replace with backend call in production)
+        if (email === "gotn27122125@gmail.com" && password === "password123") {
+            window.location.href = "user-home.html";
+        } else {
+            alert("Email hoặc mật khẩu không đúng!");
+        }
+    });
+</script>
+
+</body>
+</html>

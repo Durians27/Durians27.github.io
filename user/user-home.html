@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iPhone Pro Max Exclusive Store</title>
+    <title>Trang Chủ Người Dùng - ProMax Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -20,13 +18,13 @@
             background: linear-gradient(135deg, #000000 0%, #2c3e50 100%);
         }
         
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
         .product-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .product-card {
-            transition: all 0.3s ease;
         }
         
         .color-option {
@@ -86,21 +84,8 @@
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
         }
         
-        .navbar, .drawer {
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .footer {
-            background-color: #1F2937;
-            transition: background-color 0.3s ease;
-        }
-        
-        .contact-bg {
-            background-color: #1E2A38;
-        }
-        
         .navbar {
-            background-color: rgba(44, 62, 80, 0.5);
+            background-color: rgba(30, 64, 175, 0.5); /* Đổi thành xanh dương đậm trong suốt */
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             box-shadow: none;
@@ -108,7 +93,7 @@
         }
 
         .navbar.scrolled {
-            background-color: #2c3e50;
+            background-color: #1E40AF; /* Đổi thành xanh dương đậm */
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         
@@ -146,7 +131,7 @@
             width: 340px;
             height: 100%;
             background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"%3E%3Cpath d="M20 0 Q30 10 20 20 Q10 30 20 40 Q30 30 40 20 Q30 10 20 0 Z"/%3E%3C/svg%3E');
-            background-color: #2c3e50;
+            background-color: #1E40AF; /* Đổi thành xanh dương đậm để đồng bộ */
             transition: left 0.4s ease, transform 0.4s ease;
             z-index: 1000;
             padding: 40px 24px;
@@ -193,82 +178,9 @@
             padding: 8px 16px;
         }
         
-        .map-container {
-            height: 250px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: linear-gradient(to right, #B0E0E6, #ADD8E6);
-            padding: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            animation: zoomIn 0.5s ease;
-        }
-        
-        #map {
-            height: 100%;
-            border-radius: 8px;
-        }
-        
-        .form-input {
-            transition: all 0.3s ease;
-        }
-        
-        .form-input:focus {
-            border-color: #87CEEB;
-            box-shadow: 0 0 10px rgba(135, 206, 235, 0.6);
-        }
-        
-        .send-button {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(to right, #87CEEB, #6BB9D6);
-            transition: transform 0.3s ease;
-        }
-        
-        .send-button:hover {
-            background: linear-gradient(to right, #6BB9D6, #5AA0C2);
-            transform: scale(1.05);
-        }
-        
-        .send-button.loading .button-text {
-            visibility: hidden;
-        }
-        
-        .send-button.loading::after {
-            content: '';
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            border: 3px solid #fff;
-            border-top: 3px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        
-        .success-message {
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        
-        @keyframes slideIn {
-            from { left: -340px; transform: scale(1); }
-            to { left: 0; transform: scale(1.02); }
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes zoomIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+        .footer {
+            background-color: #1F2937;
+            transition: background-color 0.3s ease;
         }
         
         @keyframes slideInLink {
@@ -291,6 +203,7 @@
         .drawer.active .nav-link:nth-child(5) { animation-delay: 0.5s; }
         .drawer.active .nav-link:nth-child(6) { animation-delay: 0.6s; }
         .drawer.active .nav-link:nth-child(7) { animation-delay: 0.7s; }
+        .drawer.active .nav-link:nth-child(8) { animation-delay: 0.8s; }
         
         .navbar .menu-toggle, .navbar .fa-search, .navbar .fa-shopping-bag {
             animation: slideInIcon 0.6s ease forwards;
@@ -303,33 +216,9 @@
             .search-input.active {
                 width: 100%;
             }
-            .map-container {
-                height: 200px;
-            }
             .product-buttons {
                 flex-direction: column;
                 gap: 0.5rem;
-            }
-            .footer-col {
-                text-align: center;
-                margin-bottom: 1.5rem;
-            }
-            .footer-col:last-child {
-                margin-bottom: 0;
-            }
-            .footer-social {
-                justify-content: center;
-            }
-            .footer-grid {
-                flex-direction: column;
-            }
-        }
-        
-        @media (min-width: 768px) {
-            .footer-grid {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
             }
         }
     </style>
@@ -342,13 +231,13 @@
                 <button class="menu-toggle" id="menu-toggle">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
-                <img src="images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
                 <span class="font-bold text-3xl">ProMax Store</span>
             </div>
             <div class="flex items-center space-x-6">
                 <div class="search-container">
                     <i class="fas fa-search hover:text-gray-300 cursor-pointer text-xl" id="search-toggle"></i>
-                    <input type="text" class="search-input bg-gray-800 border border-gray-700 rounded-full text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Search iPhones...">
+                    <input type="text" class="search-input bg-gray-800 border border-gray-700 rounded-full text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tìm kiếm iPhone...">
                 </div>
                 <a href="cart.html"><i class="fas fa-shopping-bag hover:text-gray-300 cursor-pointer text-xl"></i></a>
             </div>
@@ -357,18 +246,20 @@
         <div class="drawer" id="drawer">
             <div class="flex flex-col h-full">
                 <div class="flex items-center justify-between mb-10">
-                    <img src="images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                    <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
                     <button class="text-white" id="close-drawer">
                         <i class="fas fa-times text-2xl"></i>
                     </button>
                 </div>
                 <div class="flex flex-col space-y-6 flex-grow">
-                    <a href="#home" class="nav-link text-white hover:text-gray-200"><i class="fas fa-home mr-3"></i>Home</a>
-                    <a href="#products" class="nav-link text-white hover:text-gray-200"><i class="fas fa-mobile-alt mr-3"></i>Products</a>
-                    <a href="#features" class="nav-link text-white hover:text-gray-200"><i class="fas fa-star mr-3"></i>Features</a>
-                    <a href="#contact" class="nav-link text-white hover:text-gray-200"><i class="fas fa-envelope mr-3"></i>Contact</a>
-                    <a href="user/login.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-sign-in-alt mr-3"></i>Login</a>
-                    <a href="user/register.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-user-plus mr-3"></i>Register</a>
+                    <a href="#home" class="nav-link text-white hover:text-gray-200"><i class="fas fa-home mr-3"></i>Trang Chủ</a>
+                    <a href="products.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-mobile-alt mr-3"></i>Sản Phẩm</a>
+                    <a href="#features" class="nav-link text-white hover:text-gray-200"><i class="fas fa-star mr-3"></i>Tính Năng</a>
+                    <a href="#contact" class="nav-link text-white hover:text-gray-200"><i class="fas fa-envelope mr-3"></i>Liên Hệ</a>
+                    <a href="profile.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-user mr-3"></i>Thông Tin Tài Khoản</a>
+                    <a href="order-history.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-history mr-3"></i>Lịch Sử Đơn Hàng</a>
+                    <a href="order-tracking.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-truck mr-3"></i>Theo Dõi Đơn Hàng</a>
+                    <a href="logout.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-sign-out-alt mr-3"></i>Đăng Xuất</a>
                 </div>
             </div>
         </div>
@@ -380,15 +271,14 @@
         <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
             <div class="md:w-1/2 mb-10 md:mb-0">
                 <h1 class="text-4xl md:text-6xl font-bold mb-6">iPhone 16 Pro Max</h1>
-                <p class="text-xl mb-8 text-gray-300">The ultimate iPhone experience with our Pro Max lineup. Titanium. So strong. So light. So Pro.</p>
+                <p class="text-xl mb-8 text-gray-300">Trải nghiệm iPhone đỉnh cao với dòng Pro Max. Titanium. Mạnh mẽ. Nhẹ. Pro.</p>
                 <div class="flex space-x-4">
-                    <button class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-full font-semibold transition">Buy Now</button>
-                    <a href="product-details.html?id=16-pro-max" class="border border-white hover:bg-white hover:text-black px-6 py-3 rounded-full font-semibold transition">Learn More</a>
+                    <a href="checkout.html" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-full font-semibold transition">Mua Ngay</a>
+                    <a href="product-details.html?id=16-pro-max" class="border border-white hover:bg-white hover:text-black px-6 py-3 rounded-full font-semibold transition">Tìm Hiểu Thêm</a>
                 </div>
             </div>
             <div class="md:w-1/2 flex justify-center">
-                <img src="images/banner.png" 
-                     alt="iPhone 16 Pro Max" class="w-full max-w-md object-contain">
+                <img src="../images/banner.png" alt="iPhone 16 Pro Max" class="w-full max-w-md object-contain">
             </div>
         </div>
     </section>
@@ -396,16 +286,14 @@
     <!-- Products Section -->
     <section id="products" class="py-16 bg-white">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12">Our Pro Max Collection</h2>
-            
+            <h2 class="text-3xl font-bold text-center mb-12">Bộ Sưu Tập Pro Max</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Product 1: iPhone 16 Pro Max -->
                 <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg p-6">
-                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">New</div>
-                    <img src="images/16-pro-max-desert-titanium.png" 
-                         alt="iPhone 16 Pro Max" class="w-full h-64 object-contain mb-6 product-image" data-id="16-pro-max">
+                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">Mới</div>
+                    <img src="../images/16-pro-max-desert-titanium.png" alt="iPhone 16 Pro Max Desert Titanium" class="w-full h-64 object-contain mb-6 product-image" data-id="16-pro-max">
                     <h3 class="text-xl font-bold mb-2">iPhone 16 Pro Max</h3>
-                    <p class="text-gray-600 mb-4">6.9-inch Super Retina XDR display</p>
+                    <p class="text-gray-600 mb-4">Màn hình Super Retina XDR 6.9 inch</p>
                     <div class="flex mb-4 color-options">
                         <div class="color-option bg-yellow-700 mr-2 active" title="Desert Titanium" data-color="Desert Titanium"></div>
                         <div class="color-option bg-gray-800 mr-2" title="Black Titanium" data-color="Black Titanium"></div>
@@ -418,21 +306,20 @@
                         <div class="storage-option border border-gray-300 px-3 py-1 rounded text-sm cursor-pointer" data-storage="1TB">1TB</div>
                     </div>
                     <div class="product-buttons flex justify-between items-center space-x-4">
-                        <span class="text-2xl font-bold">From $1,199</span>
+                        <span class="text-2xl font-bold">Từ 29.975.000 ₫</span>
                         <div class="flex space-x-4">
-                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="16-pro-max">Add to Cart</button>
-                            <button class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="16-pro-max">Buy Now</button>
-                            <a href="product-details.html?id=16-pro-max" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">View Details</a>
+                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="16-pro-max">Thêm vào Giỏ</button>
+                            <a href="checkout.html" class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="16-pro-max">Mua Ngay</a>
+                            <a href="product-details.html?id=16-pro-max" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">Xem Chi Tiết</a>
                         </div>
                     </div>
                 </div>
                 <!-- Product 2: iPhone 15 Pro Max -->
                 <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg p-6">
-                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">New</div>
-                    <img src="images/15-pro-max-blue-titanium.png" 
-                         alt="iPhone 15 Pro Max" class="w-full h-64 object-contain mb-6 product-image" data-id="15-pro-max">
+                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">Mới</div>
+                    <img src="../images/15-pro-max-blue-titanium.png" alt="iPhone 15 Pro Max Blue Titanium" class="w-full h-64 object-contain mb-6 product-image" data-id="15-pro-max">
                     <h3 class="text-xl font-bold mb-2">iPhone 15 Pro Max</h3>
-                    <p class="text-gray-600 mb-4">6.7-inch Super Retina XDR display</p>
+                    <p class="text-gray-600 mb-4">Màn hình Super Retina XDR 6.7 inch</p>
                     <div class="flex mb-4 color-options">
                         <div class="color-option bg-blue-900 mr-2 active" title="Blue Titanium" data-color="Blue Titanium"></div>
                         <div class="color-option bg-gray-800 mr-2" title="Black Titanium" data-color="Black Titanium"></div>
@@ -446,21 +333,20 @@
                         <div class="storage-option border border-gray-300 px-3 py-1 rounded text-sm cursor-pointer" data-storage="1TB">1TB</div>
                     </div>
                     <div class="product-buttons flex justify-between items-center space-x-4">
-                        <span class="text-2xl font-bold">From $1,099</span>
+                        <span class="text-2xl font-bold">Từ 27.475.000 ₫</span>
                         <div class="flex space-x-4">
-                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="15-pro-max">Add to Cart</button>
-                            <button class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="15-pro-max">Buy Now</button>
-                            <a href="user/product-details.html" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">View Details</a>
+                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="15-pro-max">Thêm vào Giỏ</button>
+                            <a href="checkout.html" class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="15-pro-max">Mua Ngay</a>
+                            <a href="product-details.html?id=15-pro-max" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">Xem Chi Tiết</a>
                         </div>
                     </div>
                 </div>
                 <!-- Product 3: iPhone 14 Pro Max -->
                 <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg p-6">
-                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">Sale</div>
-                    <img src="images/14-pro-max-deep-purple.png" 
-                         alt="iPhone 14 Pro Max" class="w-full h-64 object-contain mb-6 product-image" data-id="14-pro-max">
+                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">Giảm Giá</div>
+                    <img src="../images/14-pro-max-deep-purple.png" alt="iPhone 14 Pro Max Deep Purple" class="w-full h-64 object-contain mb-6 product-image" data-id="14-pro-max">
                     <h3 class="text-xl font-bold mb-2">iPhone 14 Pro Max</h3>
-                    <p class="text-gray-600 mb-4">6.7-inch Super Retina XDR display</p>
+                    <p class="text-gray-600 mb-4">Màn hình Super Retina XDR 6.7 inch</p>
                     <div class="flex mb-4 color-options">
                         <div class="color-option bg-purple-900 mr-2 active" title="Deep Purple" data-color="Deep Purple"></div>
                         <div class="color-option bg-gray-800 mr-2" title="Space Black" data-color="Space Black"></div>
@@ -474,21 +360,20 @@
                         <div class="storage-option border border-gray-300 px-3 py-1 rounded text-sm cursor-pointer" data-storage="1TB">1TB</div>
                     </div>
                     <div class="product-buttons flex justify-between items-center space-x-4">
-                        <span class="text-2xl font-bold">From $899</span>
+                        <span class="text-2xl font-bold">Từ 22.475.000 ₫</span>
                         <div class="flex space-x-4">
-                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="14-pro-max">Add to Cart</button>
-                            <button class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="14-pro-max">Buy Now</button>
-                            <a href="user/product-details.html" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">View Details</a>
+                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="14-pro-max">Thêm vào Giỏ</button>
+                            <a href="checkout.html" class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="14-pro-max">Mua Ngay</a>
+                            <a href="product-details.html?id=14-pro-max" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">Xem Chi Tiết</a>
                         </div>
                     </div>
                 </div>
                 <!-- Product 4: iPhone 13 Pro Max -->
                 <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg p-6">
-                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">Sale</div>
-                    <img src="images/13-pro-max-sierra-blue.png" 
-                         alt="iPhone 13 Pro Max" class="w-full h-64 object-contain mb-6 product-image" data-id="13-pro-max">
+                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">Giảm Giá</div>
+                    <img src="../images/13-pro-max-sierra-blue.png" alt="iPhone 13 Pro Max" class="w-full h-64 object-contain mb-6 product-image" data-id="13-pro-max">
                     <h3 class="text-xl font-bold mb-2">iPhone 13 Pro Max</h3>
-                    <p class="text-gray-600 mb-4">6.7-inch Super Retina XDR display</p>
+                    <p class="text-gray-600 mb-4">Màn hình Super Retina XDR 6.7 inch</p>
                     <div class="flex mb-4 color-options">
                         <div class="color-option bg-blue-400 mr-2 active" title="Sierra Blue" data-color="Sierra Blue"></div>
                         <div class="color-option bg-gray-800 mr-2" title="Graphite" data-color="Graphite"></div>
@@ -502,21 +387,20 @@
                         <div class="storage-option border border-gray-300 px-3 py-1 rounded text-sm cursor-pointer" data-storage="1TB">1TB</div>
                     </div>
                     <div class="product-buttons flex justify-between items-center space-x-4">
-                        <span class="text-2xl font-bold">From $899</span>
+                        <span class="text-2xl font-bold">Từ 22.475.000 ₫</span>
                         <div class="flex space-x-4">
-                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="13-pro-max">Add to Cart</button>
-                            <button class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="13-pro-max">Buy Now</button>
-                            <a href="user/product-details.html" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">View Details</a>
+                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="13-pro-max">Thêm vào Giỏ</button>
+                            <a href="checkout.html" class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="13-pro-max">Mua Ngay</a>
+                            <a href="product-details.html?id=13-pro-max" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">Xem Chi Tiết</a>
                         </div>
                     </div>
                 </div>
                 <!-- Product 5: iPhone 12 Pro Max -->
                 <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg p-6">
-                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">Sale</div>
-                    <img src="images/12-pro-max-pacific-blue.png" 
-                         alt="iPhone 12 Pro Max" class="w-full h-64 object-contain mb-6 product-image" data-id="12-pro-max">
+                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">Giảm Giá</div>
+                    <img src="../images/12-pro-max-pacific-blue.png" alt="iPhone 12 Pro Max" class="w-full h-64 object-contain mb-6 product-image" data-id="12-pro-max">
                     <h3 class="text-xl font-bold mb-2">iPhone 12 Pro Max</h3>
-                    <p class="text-gray-600 mb-4">6.7-inch Super Retina XDR display</p>
+                    <p class="text-gray-600 mb-4">Màn hình Super Retina XDR 6.7 inch</p>
                     <div class="flex mb-4 color-options">
                         <div class="color-option bg-blue-900 mr-2 active" title="Pacific Blue" data-color="Pacific Blue"></div>
                         <div class="color-option bg-yellow-400 mr-2" title="Gold" data-color="Gold"></div>
@@ -529,21 +413,20 @@
                         <div class="storage-option border border-gray-300 px-3 py-1 rounded text-sm cursor-pointer" data-storage="512GB">512GB</div>
                     </div>
                     <div class="product-buttons flex justify-between items-center space-x-4">
-                        <span class="text-2xl font-bold">From $799</span>
+                        <span class="text-2xl font-bold">Từ 19.975.000 ₫</span>
                         <div class="flex space-x-4">
-                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="12-pro-max">Add to Cart</button>
-                            <button class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="12-pro-max">Buy Now</button>
-                            <a href="user/product-details.html" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">View Details</a>
+                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="12-pro-max">Thêm vào Giỏ</button>
+                            <a href="checkout.html" class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="12-pro-max">Mua Ngay</a>
+                            <a href="product-details.html?id=12-pro-max" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">Xem Chi Tiết</a>
                         </div>
                     </div>
                 </div>
                 <!-- Product 6: iPhone 11 Pro Max -->
                 <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg p-6">
-                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">Sale</div>
-                    <img src="images/11-pro-max-silver.png" 
-                         alt="iPhone 11 Pro Max" class="w-full h-64 object-contain mb-6 product-image" data-id="11-pro-max">
+                    <div class="badge bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block mb-4">Giảm Giá</div>
+                    <img src="../images/11-pro-max-silver.png" alt="iPhone 11 Pro Max" class="w-full h-64 object-contain mb-6 product-image" data-id="11-pro-max">
                     <h3 class="text-xl font-bold mb-2">iPhone 11 Pro Max</h3>
-                    <p class="text-gray-600 mb-4">6.5-inch Super Retina XDR display</p>
+                    <p class="text-gray-600 mb-4">Màn hình Super Retina XDR 6.5 inch</p>
                     <div class="flex mb-4 color-options">
                         <div class="color-option bg-green-900 mr-2" title="Midnight Green" data-color="Midnight Green"></div>
                         <div class="color-option bg-gray-800 mr-2" title="Space Gray" data-color="Space Gray"></div>
@@ -556,97 +439,13 @@
                         <div class="storage-option border border-gray-300 px-3 py-1 rounded text-sm cursor-pointer" data-storage="512GB">512GB</div>
                     </div>
                     <div class="product-buttons flex justify-between items-center space-x-4">
-                        <span class="text-2xl font-bold">From $699</span>
+                        <span class="text-2xl font-bold">Từ 17.475.000 ₫</span>
                         <div class="flex space-x-4">
-                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="11-pro-max">Add to Cart</button>
-                            <button class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="11-pro-max">Buy Now</button>
-                            <a href="user/product-details.html" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">View Details</a>
+                            <button class="add-to-cart bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition" data-id="11-pro-max">Thêm vào Giỏ</button>
+                            <a href="checkout.html" class="buy-now bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition" data-id="11-pro-max">Mua Ngay</a>
+                            <a href="product-details.html?id=11-pro-max" class="details-button bg-black text-white px-4 py-2 rounded-full hover:bg-[#87CEEB] hover:text-black transition">Xem Chi Tiết</a>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="py-16 hero-gradient text-white">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12">Key Features</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-                <div class="p-6">
-                    <i class="fas fa-camera text-4xl mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">Pro Camera System</h3>
-                    <p class="text-gray-300">Capture stunning photos and videos with the most advanced camera system ever on an iPhone.</p>
-                </div>
-                <div class="p-6">
-                    <i class="fas fa-microchip text-4xl mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">A18 Bionic Chip</h3>
-                    <p class="text-gray-300">Experience blazing-fast performance and incredible power efficiency with the A18 Bionic chip.</p>
-                </div>
-                <div class="p-6">
-                    <i class="fas fa-battery-full text-4xl mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">All-Day Battery</h3>
-                    <p class="text-gray-300">Enjoy long-lasting battery life that keeps up with your busiest days.</p>
-                </div>
-                <div class="p-6">
-                    <i class="fas fa-shield-alt text-4xl mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">Dynamic Island</h3>
-                    <p class="text-gray-300">A magical new way to interact with your iPhone, bringing alerts and Live Activities to the forefront.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-16 contact-bg text-white">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold mb-8">Contact Us</h2>
-            <div class="flex flex-col md:flex-row gap-12">
-                <div class="md:w-1/2">
-                    <p class="text-gray-300 mb-6">Visit us or get in touch with our team for any questions about our Pro Max lineup.</p>
-                    <div class="map-container mb-8">
-                        <div id="map"></div>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex items-center text-lg">
-                            <i class="fas fa-map-marker-alt text-blue-400 mr-4"></i>
-                            <p>28/4 Lê Lai, Phường 1, Gò Vấp, Thành phố Hồ Chí Minh</p>
-                        </div>
-                        <div class="flex items-center text-lg">
-                            <i class="fas fa-phone text-blue-400 mr-4"></i>
-                            <p>+84 490 02993</p>
-                        </div>
-                        <div class="flex items-center text-lg">
-                            <i class="fas fa-envelope text-blue-400 mr-4"></i>
-                            <p>duriansautolotec@gmail.com</p>
-                        </div>
-                        <div class="flex items-center text-lg">
-                            <i class="fab fa-facebook text-blue-400 mr-4"></i>
-                            <p>Nguyễn Thị Thanh Như</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="md:w-1/2">
-                    <form id="contactForm" class="bg-gray-800 p-8 rounded-xl shadow-lg text-white">
-                        <div class="mb-4">
-                            <label for="name" class="block text-gray-200 font-bold mb-2">Name</label>
-                            <input type="text" id="name" name="name" class="form-input w-full px-4 py-2 border border-gray-700 bg-gray-700 rounded-lg focus:outline-none" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="email" class="block text-gray-200 font-bold mb-2">Email</label>
-                            <input type="email" id="email" name="email" class="form-input w-full px-4 py-2 border border-gray-700 bg-gray-700 rounded-lg focus:outline-none" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="message" class="block text-gray-200 font-bold mb-2">Message</label>
-                            <textarea id="message" name="message" rows="4" class="form-input w-full px-4 py-2 border border-gray-700 bg-gray-700 rounded-lg focus:outline-none" required></textarea>
-                        </div>
-                        <button type="submit" id="sendButton" class="send-button w-full text-white font-bold py-3 px-4 rounded-full shadow-lg">
-                            <span class="button-text">Send Message</span>
-                        </button>
-                        <div id="successMessage" class="hidden text-green-400 mt-4 text-center">
-                            Thank you! Your message has been sent.
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -656,7 +455,7 @@
     <footer class="footer bg-gray-900 text-white py-6">
         <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
             <div class="flex items-center space-x-4 mb-4 md:mb-0">
-                <img src="images/logo1.png" alt="ProMax Store Logo" class="w-10 h-10 object-contain">
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="w-10 h-10 object-contain">
                 <span class="font-bold text-xl">ProMax Store</span>
             </div>
             <div class="flex flex-col items-center">
@@ -672,6 +471,7 @@
             </div>
         </div>
     </footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const menuToggle = document.getElementById('menu-toggle');
@@ -681,9 +481,6 @@
             const searchToggle = document.getElementById('search-toggle');
             const searchInput = document.querySelector('.search-input');
             const navLinks = document.querySelectorAll('.nav-link');
-            const contactForm = document.getElementById('contactForm');
-            const sendButton = document.getElementById('sendButton');
-            const successMessage = document.getElementById('successMessage');
             const navbar = document.querySelector('.navbar');
 
             // Product data
@@ -691,56 +488,56 @@
                 {
                     id: '16-pro-max',
                     name: 'iPhone 16 Pro Max',
-                    price: 1199,
+                    price: 1199, // USD for internal calculation (approx 29.975.000 VND)
                     colors: ['Desert Titanium', 'Black Titanium', 'White Titanium', 'Natural Titanium'],
                     storage: ['256GB', '512GB', '1TB'],
-                    image: 'images/16-pro-max-desert-titanium.png',
-                    description: '6.9-inch Super Retina XDR display'
+                    image: '../images/16-pro-max-desert-titanium.png',
+                    description: 'Màn hình Super Retina XDR 6.9 inch'
                 },
                 {
                     id: '15-pro-max',
                     name: 'iPhone 15 Pro Max',
-                    price: 1099,
+                    price: 1099, // USD (approx 27.475.000 VND)
                     colors: ['Blue Titanium', 'Black Titanium', 'White Titanium', 'Natural Titanium'],
                     storage: ['128GB', '256GB', '512GB', '1TB'],
-                    image: 'images/15-pro-max-blue-titanium.png',
-                    description: '6.7-inch Super Retina XDR display'
+                    image: '../images/15-pro-max-blue-titanium.png',
+                    description: 'Màn hình Super Retina XDR 6.7 inch'
                 },
                 {
                     id: '14-pro-max',
                     name: 'iPhone 14 Pro Max',
-                    price: 899,
+                    price: 899, // USD (approx 22.475.000 VND)
                     colors: ['Deep Purple', 'Space Black', 'Silver', 'Gold'],
                     storage: ['128GB', '256GB', '512GB', '1TB'],
-                    image: 'images/14-pro-max-deep-purple.png',
-                    description: '6.7-inch Super Retina XDR display'
+                    image: '../images/14-pro-max-deep-purple.png',
+                    description: 'Màn hình Super Retina XDR 6.7 inch'
                 },
                 {
                     id: '13-pro-max',
                     name: 'iPhone 13 Pro Max',
-                    price: 899,
+                    price: 899, // USD (approx 22.475.000 VND)
                     colors: ['Sierra Blue', 'Graphite', 'Silver', 'Gold'],
                     storage: ['128GB', '256GB', '512GB', '1TB'],
-                    image: 'images/13-pro-max-sierra-blue.png',
-                    description: '6.7-inch Super Retina XDR display'
+                    image: '../images/13-pro-max-sierra-blue.png',
+                    description: 'Màn hình Super Retina XDR 6.7 inch'
                 },
                 {
                     id: '12-pro-max',
                     name: 'iPhone 12 Pro Max',
-                    price: 799,
+                    price: 799, // USD (approx 19.975.000 VND)
                     colors: ['Pacific Blue', 'Gold', 'Graphite', 'Silver'],
                     storage: ['128GB', '256GB', '512GB'],
-                    image: 'images/12-pro-max-pacific-blue.png',
-                    description: '6.7-inch Super Retina XDR display'
+                    image: '../images/12-pro-max-pacific-blue.png',
+                    description: 'Màn hình Super Retina XDR 6.7 inch'
                 },
                 {
                     id: '11-pro-max',
                     name: 'iPhone 11 Pro Max',
-                    price: 699,
+                    price: 699, // USD (approx 17.475.000 VND)
                     colors: ['Midnight Green', 'Space Gray', 'Gold', 'Silver'],
                     storage: ['64GB', '256GB', '512GB'],
-                    image: 'images/11-pro-max-white.png',
-                    description: '6.5-inch Super Retina XDR display'
+                    image: '../images/11-pro-max-silver.png',
+                    description: 'Màn hình Super Retina XDR 6.5 inch'
                 }
             ];
 
@@ -775,20 +572,6 @@
                 }
             });
 
-            // Contact form animation
-            contactForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                sendButton.classList.add('loading');
-                setTimeout(() => {
-                    sendButton.classList.remove('loading');
-                    successMessage.classList.remove('hidden');
-                    contactForm.reset();
-                    setTimeout(() => {
-                        successMessage.classList.add('hidden');
-                    }, 3000);
-                }, 1500);
-            });
-
             // Scroll effect for navbar
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
@@ -797,15 +580,6 @@
                     navbar.classList.remove('scrolled');
                 }
             });
-
-            // Initialize Leaflet map
-            const map = L.map('map').setView([10.8333, 106.6667], 15);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-            L.marker([10.8333, 106.6667]).addTo(map)
-                .bindPopup('ProMax Store<br>28/4 Lê Lai, Phường 1, Gò Vấp, Thành phố Hồ Chí Minh')
-                .openPopup();
 
             // Add to Cart and Buy Now functionality
             function addToCart(productId, color, storage, redirect = false) {
@@ -816,7 +590,7 @@
                     id: product.id,
                     name: product.name,
                     price: product.price,
-                    image: `images/${product.id}-${color.toLowerCase().replace(/\s+/g, '-')}.png`,
+                    image: `../images/${product.id}-${color.toLowerCase().replace(/\s+/g, '-')}.png`,
                     color: color,
                     storage: storage,
                     quantity: 1
@@ -838,7 +612,7 @@
                 if (redirect) {
                     window.location.href = 'cart.html';
                 } else {
-                    alert(`${product.name} (${color}, ${storage}) has been added to your cart!`);
+                    alert(`${product.name} (${color}, ${storage}) đã được thêm vào giỏ hàng!`);
                 }
             }
 
@@ -855,7 +629,7 @@
                         option.classList.add('active');
                         selectedColor = option.getAttribute('data-color');
                         const image = card.querySelector('.product-image');
-                        image.src = `images/${productId}-${selectedColor.toLowerCase().replace(/\s+/g, '-')}.png`;
+                        image.src = `../images/${productId}-${selectedColor.toLowerCase().replace(/\s+/g, '-')}.png`;
                     });
                 });
 

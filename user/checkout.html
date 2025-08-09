@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán - ProMax Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #87CEEB;
+        }
+        
+        .navbar {
+            background-color: rgba(14, 165, 233, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: #0EA5E9;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-link {
+            position: relative;
+            padding: 14px 24px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .nav-link:hover::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 2px;
+            background-color: #fff;
+        }
+        
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -340px;
+            width: 340px;
+            height: 100%;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"%3E%3Cpath d="M20 0 Q30 10 20 20 Q10 30 20 40 Q30 30 40 20 Q30 10 20 0 Z"/%3E%3C/svg%3E');
+            background-color: #0EA5E9;
+            transition: left 0.4s ease, transform 0.4s ease;
+            z-index: 1000;
+            padding: 40px 24px;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .drawer.active {
+            left: 0;
+            transform: scale(1.02);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease;
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-input {
+            width: 0;
+            opacity: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input.active {
+            width: 300px;
+            opacity: 1;
+            padding: 8px 16px;
+        }
+        
+        .footer {
+            background-color: #1F2937;
+            transition: background-color 0.3s ease;
+        }
+        
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-img:hover {
+            transform: rotate(10deg) scale(1.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+        
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            border-color: #0EA5E9;
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.5); /* Sửa ring thành box-shadow */
+            outline: none;
+        }
+        
+        .confirm-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .confirm-btn:hover {
+            background-color: #38BDF8;
+        }
+        
+        .payment-option {
+            transition: all 0.3s ease;
+        }
+        
+        .payment-option:hover {
+            background-color: #f0f9ff;
+        }
+        
+        .payment-option input:checked + label {
+            color: #0EA5E9;
+            font-weight: 600;
+        }
+        
+        @keyframes slideInLink {
+            from { transform: translateX(-30px) scale(0.95); opacity: 0; }
+            to { transform: translateX(0) scale(1); opacity: 1; }
+        }
+        
+        @keyframes slideInIcon {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .drawer.active .nav-link {
+            animation: slideInLink 0.4s ease forwards;
+        }
+        .drawer.active .nav-link:nth-child(1) { animation-delay: 0.1s; }
+        .drawer.active .nav-link:nth-child(2) { animation-delay: 0.2s; }
+        .drawer.active .nav-link:nth-child(3) { animation-delay: 0.3s; }
+        .drawer.active .nav-link:nth-child(4) { animation-delay: 0.4s; }
+        .drawer.active .nav-link:nth-child(5) { animation-delay: 0.5s; }
+        .drawer.active .nav-link:nth-child(6) { animation-delay: 0.6s; }
+        .drawer.active .nav-link:nth-child(7) { animation-delay: 0.7s; }
+        .drawer.active .nav-link:nth-child(8) { animation-delay: 0.8s; }
+        
+        .navbar .menu-toggle, .navbar .fa-search, .navbar .fa-shopping-bag {
+            animation: slideInIcon 0.6s ease forwards;
+        }
+        .navbar .menu-toggle { animation-delay: 0.2s; }
+        .navbar .fa-search { animation-delay: 0.4s; }
+        .navbar .fa-shopping-bag { animation-delay: 0.5s; }
+        
+        @media (max-width: 768px) {
+            .search-input.active {
+                width: 100%;
+            }
+            .checkout-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar text-white py-6 px-12 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-10">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                <span class="font-bold text-3xl">ProMax Store</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="search-container">
+                    <i class="fas fa-search hover:text-gray-300 cursor-pointer text-xl" id="search-toggle"></i>
+                    <input type="text" class="search-input bg-gray-800 border border-gray-700 rounded-full text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tìm kiếm iPhone...">
+                </div>
+                <a href="cart.html"><i class="fas fa-shopping-bag hover:text-gray-300 cursor-pointer text-xl"></i></a>
+            </div>
+        </div>
+        <!-- Drawer Menu -->
+        <div class="drawer" id="drawer">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between mb-10">
+                    <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                    <button class="text-white" id="close-drawer">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col space-y-6 flex-grow">
+                    <a href="user-home.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-home mr-3"></i>Trang Chủ</a>
+                    <a href="products.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-mobile-alt mr-3"></i>Sản Phẩm</a>
+                    <a href="#features" class="nav-link text-white hover:text-gray-200"><i class="fas fa-star mr-3"></i>Tính Năng</a>
+                    <a href="#contact" class="nav-link text-white hover:text-gray-200"><i class="fas fa-envelope mr-3"></i>Liên Hệ</a>
+                    <a href="profile.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-user mr-3"></i>Thông Tin Tài Khoản</a>
+                    <a href="order-history.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-history mr-3"></i>Lịch Sử Đơn Hàng</a>
+                    <a href="order-tracking.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-truck mr-3"></i>Theo Dõi Đơn Hàng</a>
+                    <a href="logout.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-sign-out-alt mr-3"></i>Đăng Xuất</a>
+                </div>
+            </div>
+        </div>
+        <div class="overlay" id="overlay"></div>
+    </nav>
+
+    <!-- Checkout Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Thanh Toán</h2>
+            <div id="checkout-empty" class="hidden text-center text-gray-600 text-xl">Giỏ hàng của bạn đang trống.</div>
+            <div class="checkout-container flex flex-col md:flex-row gap-8">
+                <!-- Order Summary -->
+                <div class="md:w-1/2 bg-gray-50 p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4">Tóm Tắt Đơn Hàng</h3>
+                    <div id="order-items" class="space-y-4"></div>
+                    <div class="mt-6 text-xl font-bold">Tổng cộng: <span id="order-total">0 ₫</span></div>
+                </div>
+                <!-- Delivery Info -->
+                <div class="md:w-1/2 bg-gray-50 p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4">Thông Tin Giao Hàng</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Họ và Tên</label>
+                            <input type="text" id="name" class="input-field w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none" placeholder="Nhập họ và tên">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Số Điện Thoại</label>
+                            <input type="tel" id="phone" class="input-field w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none" placeholder="Nhập số điện thoại">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Địa Chỉ</label>
+                            <input type="text" id="address" class="input-field w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none" placeholder="Nhập địa chỉ giao hàng">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Ghi Chú</label>
+                            <textarea id="notes" class="input-field w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none" placeholder="Ghi chú thêm (nếu có)"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phương Thức Thanh Toán</label>
+                            <div class="space-y-2">
+                                <div class="payment-option flex items-center p-2 rounded-md">
+                                    <input type="radio" id="cod" name="payment" value="COD" class="mr-2" checked>
+                                    <label for="cod" class="cursor-pointer">Thanh toán khi nhận hàng (COD)</label>
+                                </div>
+                                <div class="payment-option flex items-center p-2 rounded-md">
+                                    <input type="radio" id="bank" name="payment" value="Bank Transfer" class="mr-2">
+                                    <label for="bank" class="cursor-pointer">Chuyển khoản ngân hàng</label>
+                                </div>
+                                <div class="payment-option flex items-center p-2 rounded-md">
+                                    <input type="radio" id="momo" name="payment" value="Momo" class="mr-2">
+                                    <label for="momo" class="cursor-pointer">Ví điện tử Momo</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="confirm-order" class="confirm-btn bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition w-full">Xác Nhận Đặt Hàng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer bg-gray-900 text-white py-6">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="w-10 h-10 object-contain">
+                <span class="font-bold text-xl">ProMax Store</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <div class="flex space-x-6 text-xl mb-4">
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="text-sm text-gray-400">
+                    <p>&copy; 2025 ProMax Store. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const closeDrawer = document.getElementById('close-drawer');
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('overlay');
+            const searchToggle = document.getElementById('search-toggle');
+            const searchInput = document.querySelector('.search-input');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const navbar = document.querySelector('.navbar');
+            const orderItemsContainer = document.getElementById('order-items');
+            const orderTotalElement = document.getElementById('order-total');
+            const checkoutEmptyElement = document.getElementById('checkout-empty');
+            const confirmOrderBtn = document.getElementById('confirm-order');
+            const nameInput = document.getElementById('name');
+            const phoneInput = document.getElementById('phone');
+            const addressInput = document.getElementById('address');
+            const notesInput = document.getElementById('notes');
+            const paymentInputs = document.querySelectorAll('input[name="payment"]');
+
+            // Drawer menu toggle
+            menuToggle.addEventListener('click', () => {
+                drawer.classList.add('active');
+                overlay.classList.add('active');
+            });
+            
+            closeDrawer.addEventListener('click', () => {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            overlay.addEventListener('click', () => {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    drawer.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            });
+
+            // Search input toggle
+            searchToggle.addEventListener('click', () => {
+                searchInput.classList.toggle('active');
+                if (searchInput.classList.contains('active')) {
+                    searchInput.focus();
+                }
+            });
+
+            // Scroll effect for navbar
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Load cart from localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Format price to VND
+            function formatPrice(price) {
+                return (price * 25000).toLocaleString('vi-VN') + ' ₫';
+            }
+
+            // Update order summary
+            function updateOrderSummary() {
+                orderItemsContainer.innerHTML = '';
+                let total = 0;
+
+                if (cart.length === 0) {
+                    checkoutEmptyElement.classList.remove('hidden');
+                    orderTotalElement.textContent = '0 ₫';
+                    confirmOrderBtn.disabled = true;
+                    return;
+                }
+
+                checkoutEmptyElement.classList.add('hidden');
+                confirmOrderBtn.disabled = false;
+
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity * 25000;
+                    total += itemTotal;
+
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'flex justify-between items-center py-2 border-b';
+                    itemElement.innerHTML = `
+                        <div class="flex items-center">
+                            <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-contain mr-4">
+                            <div>
+                                <h4 class="font-semibold">${item.name}</h4>
+                                <p class="text-sm text-gray-600">${item.color}, ${item.storage}</p>
+                                <p class="text-sm">Số lượng: ${item.quantity}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p>${formatPrice(itemTotal / 25000)}</p>
+                        </div>
+                    `;
+                    orderItemsContainer.appendChild(itemElement);
+                });
+
+                orderTotalElement.textContent = formatPrice(total / 25000);
+            }
+
+            // Handle order confirmation
+            confirmOrderBtn.addEventListener('click', () => {
+                const name = nameInput.value.trim();
+                const phone = phoneInput.value.trim();
+                const address = addressInput.value.trim();
+                const notes = notesInput.value.trim();
+                const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value;
+
+                if (!name || !phone || !address || !paymentMethod) {
+                    alert('Vui lòng điền đầy đủ họ tên, số điện thoại, địa chỉ và chọn phương thức thanh toán.');
+                    return;
+                }
+
+                const order = {
+                    id: Date.now().toString(),
+                    items: cart,
+                    total: cart.reduce((sum, item) => sum + item.price * item.quantity * 25000, 0),
+                    customer: { name, phone, address, notes },
+                    paymentMethod: paymentMethod,
+                    date: new Date().toISOString(),
+                    status: 'pending'
+                };
+
+                let orders = JSON.parse(localStorage.getItem('orders')) || [];
+                orders.push(order);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                localStorage.removeItem('cart');
+
+                alert('Đặt hàng thành công! Cảm ơn bạn đã mua sắm tại ProMax Store.');
+                window.location.href = 'user-home.html';
+            });
+
+            // Initial order summary render
+            updateOrderSummary();
+        });
+    </script>
+</body>
+</html>

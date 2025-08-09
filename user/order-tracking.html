@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theo Dõi Đơn Hàng - ProMax Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #87CEEB;
+        }
+        
+        .navbar {
+            background-color: rgba(14, 165, 233, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: #0EA5E9;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-link {
+            position: relative;
+            padding: 14px 24px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .nav-link:hover::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 2px;
+            background-color: #fff;
+        }
+        
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -340px;
+            width: 340px;
+            height: 100%;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"%3E%3Cpath d="M20 0 Q30 10 20 20 Q10 30 20 40 Q30 30 40 20 Q30 10 20 0 Z"/%3E%3C/svg%3E');
+            background-color: #0EA5E9;
+            transition: left 0.4s ease, transform 0.4s ease;
+            z-index: 1000;
+            padding: 40px 24px;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .drawer.active {
+            left: 0;
+            transform: scale(1.02);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease;
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-input {
+            width: 0;
+            opacity: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input.active {
+            width: 300px;
+            opacity: 1;
+            padding: 8px 16px;
+        }
+        
+        .footer {
+            background-color: #1F2937;
+            transition: background-color 0.3s ease;
+        }
+        
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-img:hover {
+            transform: rotate(10deg) scale(1.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+        
+        .tracking-item {
+            transition: all 0.3s ease;
+        }
+        
+        .tracking-item:hover {
+            background-color: #f9fafb;
+        }
+        
+        .action-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background-color: #38BDF8;
+        }
+        
+        .status-step {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .status-step::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #94A3B8;
+            transition: background-color 0.3s ease;
+        }
+        
+        .status-step.active::before {
+            background-color: #0EA5E9;
+        }
+        
+        .status-step.completed::before {
+            background-color: #22C55E;
+        }
+        
+        .status-steps .status-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            bottom: -20px;
+            width: 2px;
+            background-color: #E5E7EB;
+        }
+        
+        @keyframes slideInLink {
+            from { transform: translateX(-30px) scale(0.95); opacity: 0; }
+            to { transform: translateX(0) scale(1); opacity: 1; }
+        }
+        
+        @keyframes slideInIcon {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .drawer.active .nav-link {
+            animation: slideInLink 0.4s ease forwards;
+        }
+        .drawer.active .nav-link:nth-child(1) { animation-delay: 0.1s; }
+        .drawer.active .nav-link:nth-child(2) { animation-delay: 0.2s; }
+        .drawer.active .nav-link:nth-child(3) { animation-delay: 0.3s; }
+        .drawer.active .nav-link:nth-child(4) { animation-delay: 0.4s; }
+        .drawer.active .nav-link:nth-child(5) { animation-delay: 0.5s; }
+        .drawer.active .nav-link:nth-child(6) { animation-delay: 0.6s; }
+        .drawer.active .nav-link:nth-child(7) { animation-delay: 0.7s; }
+        .drawer.active .nav-link:nth-child(8) { animation-delay: 0.8s; }
+        
+        .navbar .menu-toggle, .navbar .fa-search, .navbar .fa-shopping-bag {
+            animation: slideInIcon 0.6s ease forwards;
+        }
+        .navbar .menu-toggle { animation-delay: 0.2s; }
+        .navbar .fa-search { animation-delay: 0.4s; }
+        .navbar .fa-shopping-bag { animation-delay: 0.5s; }
+        
+        @media (max-width: 768px) {
+            .search-input.active {
+                width: 100%;
+            }
+            .tracking-table {
+                display: none;
+            }
+            .tracking-grid {
+                display: grid;
+                gap: 1rem;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .tracking-grid {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar text-white py-6 px-12 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-10">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                <span class="font-bold text-3xl">ProMax Store</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="search-container">
+                    <i class="fas fa-search hover:text-gray-300 cursor-pointer text-xl" id="search-toggle"></i>
+                    <input type="text" class="search-input bg-gray-800 border border-gray-700 rounded-full text-white focus:outline-none" placeholder="Tìm kiếm iPhone...">
+                </div>
+                <a href="cart.html"><i class="fas fa-shopping-bag hover:text-gray-300 cursor-pointer text-xl"></i></a>
+            </div>
+        </div>
+        <!-- Drawer Menu -->
+        <div class="drawer" id="drawer">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between mb-10">
+                    <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                    <button class="text-white" id="close-drawer">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col space-y-6 flex-grow">
+                    <a href="user-home.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-home mr-3"></i>Trang Chủ</a>
+                    <a href="products.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-mobile-alt mr-3"></i>Sản Phẩm</a>
+                    <a href="#features" class="nav-link text-white hover:text-gray-200"><i class="fas fa-star mr-3"></i>Tính Năng</a>
+                    <a href="#contact" class="nav-link text-white hover:text-gray-200"><i class="fas fa-envelope mr-3"></i>Liên Hệ</a>
+                    <a href="profile.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-user mr-3"></i>Thông Tin Tài Khoản</a>
+                    <a href="order-history.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-history mr-3"></i>Lịch Sử Đơn Hàng</a>
+                    <a href="order-tracking.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-truck mr-3"></i>Theo Dõi Đơn Hàng</a>
+                    <a href="logout.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-sign-out-alt mr-3"></i>Đăng Xuất</a>
+                </div>
+            </div>
+        </div>
+        <div class="overlay" id="overlay"></div>
+    </nav>
+
+    <!-- Order Tracking Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Theo Dõi Đơn Hàng</h2>
+            <div id="tracking-not-found" class="hidden text-center text-gray-600 text-xl">Đơn hàng không tồn tại.</div>
+            <div id="tracking-content" class="space-y-8">
+                <!-- Order Info -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4">Thông Tin Đơn Hàng</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <p><span class="font-semibold">Mã Đơn Hàng:</span> <span id="tracking-order-id"></span></p>
+                        <p><span class="font-semibold">Ngày Đặt Hàng:</span> <span id="tracking-order-date"></span></p>
+                        <p><span class="font-semibold">Tổng Tiền:</span> <span id="tracking-order-total"></span></p>
+                        <p><span class="font-semibold">Phương Thức Thanh Toán:</span> <span id="tracking-payment-method"></span></p>
+                    </div>
+                </div>
+                <!-- Customer Info -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4">Thông Tin Khách Hàng</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <p><span class="font-semibold">Họ và Tên:</span> <span id="tracking-customer-name"></span></p>
+                        <p><span class="font-semibold">Số Điện Thoại:</span> <span id="tracking-customer-phone"></span></p>
+                        <p><span class="font-semibold">Địa Chỉ:</span> <span id="tracking-customer-address"></span></p>
+                        <p><span class="font-semibold">Ghi Chú:</span> <span id="tracking-customer-notes"></span></p>
+                    </div>
+                </div>
+                <!-- Order Items -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4">Chi Tiết Sản Phẩm</h3>
+                    <div class="tracking-table">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b">
+                                    <th class="py-4 px-2">Sản Phẩm</th>
+                                    <th class="py-4 px-2">Màu Sắc</th>
+                                    <th class="py-4 px-2">Dung Lượng</th>
+                                    <th class="py-4 px-2">Số Lượng</th>
+                                    <th class="py-4 px-2">Giá</th>
+                                    <th class="py-4 px-2">Tổng</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tracking-items"></tbody>
+                        </table>
+                    </div>
+                    <div class="tracking-grid grid gap-4"></div>
+                </div>
+                <!-- Tracking Status -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4">Trạng Thái Đơn Hàng</h3>
+                    <div class="status-steps space-y-4">
+                        <div class="status-step" data-status="pending">
+                            <span>Đang xử lý</span>
+                        </div>
+                        <div class="status-step" data-status="shipping">
+                            <span>Đang giao</span>
+                        </div>
+                        <div class="status-step" data-status="delivered">
+                            <span>Đã giao</span>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Cập nhật trạng thái</label>
+                        <select id="status-select" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500">
+                            <option value="pending">Đang xử lý</option>
+                            <option value="shipping">Đang giao</option>
+                            <option value="delivered">Đã giao</option>
+                        </select>
+                        <button id="update-status" class="action-btn bg-blue-600 text-white px-6 py-3 rounded-full font-semibold mt-4">Cập Nhật</button>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="text-center">
+                    <a href="order-history.html" class="action-btn bg-blue-600 text-white px-6 py-3 rounded-full font-semibold">Quay Lại Lịch Sử Đơn Hàng</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer bg-gray-900 text-white py-6">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="w-10 h-10 object-contain">
+                <span class="font-bold text-xl">ProMax Store</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <div class="flex space-x-6 text-xl mb-4">
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="text-sm text-gray-400">
+                    <p>&copy; 2025 ProMax Store. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const closeDrawer = document.getElementById('close-drawer');
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('overlay');
+            const searchToggle = document.getElementById('search-toggle');
+            const searchInput = document.querySelector('.search-input');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const navbar = document.querySelector('.navbar');
+            const trackingContent = document.getElementById('tracking-content');
+            const trackingNotFound = document.getElementById('tracking-not-found');
+            const orderIdElement = document.getElementById('tracking-order-id');
+            const orderDateElement = document.getElementById('tracking-order-date');
+            const orderTotalElement = document.getElementById('tracking-order-total');
+            const paymentMethodElement = document.getElementById('tracking-payment-method');
+            const customerNameElement = document.getElementById('tracking-customer-name');
+            const customerPhoneElement = document.getElementById('tracking-customer-phone');
+            const customerAddressElement = document.getElementById('tracking-customer-address');
+            const customerNotesElement = document.getElementById('tracking-customer-notes');
+            const trackingItemsContainer = document.getElementById('tracking-items');
+            const trackingGridContainer = document.querySelector('.tracking-grid');
+            const statusSteps = document.querySelectorAll('.status-step');
+            const statusSelect = document.getElementById('status-select');
+            const updateStatusBtn = document.getElementById('update-status');
+
+            // Drawer menu toggle
+            menuToggle.addEventListener('click', () => {
+                drawer.classList.add('active');
+                overlay.classList.add('active');
+            });
+            
+            closeDrawer.addEventListener('click', () => {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            overlay.addEventListener('click', () => {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    drawer.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            });
+
+            // Search input toggle
+            searchToggle.addEventListener('click', () => {
+                searchInput.classList.toggle('active');
+                if (searchInput.classList.contains('active')) {
+                    searchInput.focus();
+                }
+            });
+
+            // Scroll effect for navbar
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Format price to VND
+            function formatPrice(price) {
+                return (price * 25000).toLocaleString('vi-VN') + ' ₫';
+            }
+
+            // Format date
+            function formatDate(isoString) {
+                const date = new Date(isoString);
+                return date.toLocaleString('vi-VN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                });
+            }
+
+            // Get orderId from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('orderId');
+
+            // Load orders from localStorage
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const order = orders.find(o => o.id === orderId);
+
+            // Display tracking
+            if (!order) {
+                trackingContent.classList.add('hidden');
+                trackingNotFound.classList.remove('hidden');
+                return;
+            }
+
+            trackingContent.classList.remove('hidden');
+            trackingNotFound.classList.add('hidden');
+
+            // Populate order info
+            orderIdElement.textContent = order.id;
+            orderDateElement.textContent = formatDate(order.date);
+            orderTotalElement.textContent = formatPrice(order.total / 25000);
+            paymentMethodElement.textContent = order.paymentMethod === 'COD' ? 'Thanh toán khi nhận hàng' : 
+                                            order.paymentMethod === 'Bank Transfer' ? 'Chuyển khoản ngân hàng' : 'Ví điện tử Momo';
+
+            // Populate customer info
+            customerNameElement.textContent = order.customer.name;
+            customerPhoneElement.textContent = order.customer.phone;
+            customerAddressElement.textContent = order.customer.address;
+            customerNotesElement.textContent = order.customer.notes || 'Không có';
+
+            // Populate order items
+            let total = 0;
+            order.items.forEach(item => {
+                const itemTotal = item.price * item.quantity * 25000;
+                total += itemTotal;
+
+                // Table row for desktop
+                const row = document.createElement('tr');
+                row.className = 'tracking-item border-b';
+                row.innerHTML = `
+                    <td class="py-4 px-2 flex items-center">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-contain mr-4">
+                        <span>${item.name}</span>
+                    </td>
+                    <td class="py-4 px-2">${item.color}</td>
+                    <td class="py-4 px-2">${item.storage}</td>
+                    <td class="py-4 px-2">${item.quantity}</td>
+                    <td class="py-4 px-2">${formatPrice(item.price)}</td>
+                    <td class="py-4 px-2">${formatPrice(itemTotal / 25000)}</td>
+                `;
+                trackingItemsContainer.appendChild(row);
+
+                // Grid item for mobile
+                const gridItem = document.createElement('div');
+                gridItem.className = 'tracking-item bg-white p-4 rounded-lg shadow';
+                gridItem.innerHTML = `
+                    <div class="flex items-center mb-4">
+                        <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-contain mr-4">
+                        <div>
+                            <h3 class="font-bold">${item.name}</h3>
+                            <p class="text-gray-600">${item.color}, ${item.storage}</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span>Giá: ${formatPrice(item.price)}</span>
+                        <span>Số lượng: ${item.quantity}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Tổng: ${formatPrice(itemTotal / 25000)}</span>
+                    </div>
+                `;
+                trackingGridContainer.appendChild(gridItem);
+            });
+
+            // Update status steps
+            const updateStatusSteps = (status) => {
+                statusSteps.forEach(step => {
+                    const stepStatus = step.getAttribute('data-status');
+                    if (stepStatus === status) {
+                        step.classList.add('active');
+                    } else if (['shipping', 'delivered'].includes(stepStatus) && ['shipping', 'delivered'].includes(status)) {
+                        step.classList.add('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+                statusSelect.value = status;
+            };
+
+            // Initial status
+            updateStatusSteps(order.status);
+
+            // Update status
+            updateStatusBtn.addEventListener('click', () => {
+                const newStatus = statusSelect.value;
+                order.status = newStatus;
+                const updatedOrders = orders.map(o => o.id === orderId ? order : o);
+                localStorage.setItem('orders', JSON.stringify(updatedOrders));
+                updateStatusSteps(newStatus);
+                alert('Cập nhật trạng thái thành công!');
+            });
+        });
+    </script>
+</body>
+</html>

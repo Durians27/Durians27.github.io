@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hóa Đơn - ProMax Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #87CEEB;
+        }
+        
+        .navbar {
+            background-color: rgba(14, 165, 233, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: #0EA5E9;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-link {
+            position: relative;
+            padding: 14px 24px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .nav-link:hover::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 2px;
+            background-color: #fff;
+        }
+        
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -340px;
+            width: 340px;
+            height: 100%;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"%3E%3Cpath d="M20 0 Q30 10 20 20 Q10 30 20 40 Q30 30 40 20 Q30 10 20 0 Z"/%3E%3C/svg%3E');
+            background-color: #0EA5E9;
+            transition: left 0.4s ease, transform 0.4s ease;
+            z-index: 1000;
+            padding: 40px 24px;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .drawer.active {
+            left: 0;
+            transform: scale(1.02);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease;
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-input {
+            width: 0;
+            opacity: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input.active {
+            width: 300px;
+            opacity: 1;
+            padding: 8px 16px;
+        }
+        
+        .footer {
+            background-color: #1F2937;
+            transition: background-color 0.3s ease;
+        }
+        
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-img:hover {
+            transform: rotate(10deg) scale(1.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+        
+        .invoice-item {
+            transition: all 0.3s ease;
+        }
+        
+        .invoice-item:hover {
+            background-color: #f9fafb;
+        }
+        
+        .action-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background-color: #38BDF8;
+        }
+        
+        @keyframes slideInLink {
+            from { transform: translateX(-30px) scale(0.95); opacity: 0; }
+            to { transform: translateX(0) scale(1); opacity: 1; }
+        }
+        
+        @keyframes slideInIcon {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .drawer.active .nav-link {
+            animation: slideInLink 0.4s ease forwards;
+        }
+        .drawer.active .nav-link:nth-child(1) { animation-delay: 0.1s; }
+        .drawer.active .nav-link:nth-child(2) { animation-delay: 0.2s; }
+        .drawer.active .nav-link:nth-child(3) { animation-delay: 0.3s; }
+        .drawer.active .nav-link:nth-child(4) { animation-delay: 0.4s; }
+        .drawer.active .nav-link:nth-child(5) { animation-delay: 0.5s; }
+        .drawer.active .nav-link:nth-child(6) { animation-delay: 0.6s; }
+        .drawer.active .nav-link:nth-child(7) { animation-delay: 0.7s; }
+        .drawer.active .nav-link:nth-child(8) { animation-delay: 0.8s; }
+        
+        .navbar .menu-toggle, .navbar .fa-search, .navbar .fa-shopping-bag {
+            animation: slideInIcon 0.6s ease forwards;
+        }
+        .navbar .menu-toggle { animation-delay: 0.2s; }
+        .navbar .fa-search { animation-delay: 0.4s; }
+        .navbar .fa-shopping-bag { animation-delay: 0.5s; }
+        
+        @media (max-width: 768px) {
+            .search-input.active {
+                width: 100%;
+            }
+            .invoice-table {
+                display: none;
+            }
+            .invoice-grid {
+                display: grid;
+                gap: 1rem;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .invoice-grid {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar text-white py-6 px-12 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-10">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                <span class="font-bold text-3xl">ProMax Store</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="search-container">
+                    <i class="fas fa-search hover:text-gray-300 cursor-pointer text-xl" id="search-toggle"></i>
+                    <input type="text" class="search-input bg-gray-800 border border-gray-700 rounded-full text-white focus:outline-none" placeholder="Tìm kiếm iPhone...">
+                </div>
+                <a href="cart.html"><i class="fas fa-shopping-bag hover:text-gray-300 cursor-pointer text-xl"></i></a>
+            </div>
+        </div>
+        <!-- Drawer Menu -->
+        <div class="drawer" id="drawer">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between mb-10">
+                    <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                    <button class="text-white" id="close-drawer">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col space-y-6 flex-grow">
+                    <a href="user-home.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-home mr-3"></i>Trang Chủ</a>
+                    <a href="products.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-mobile-alt mr-3"></i>Sản Phẩm</a>
+                    <a href="#features" class="nav-link text-white hover:text-gray-200"><i class="fas fa-star mr-3"></i>Tính Năng</a>
+                    <a href="#contact" class="nav-link text-white hover:text-gray-200"><i class="fas fa-envelope mr-3"></i>Liên Hệ</a>
+                    <a href="profile.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-user mr-3"></i>Thông Tin Tài Khoản</a>
+                    <a href="order-history.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-history mr-3"></i>Lịch Sử Đơn Hàng</a>
+                    <a href="order-tracking.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-truck mr-3"></i>Theo Dõi Đơn Hàng</a>
+                    <a href="logout.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-sign-out-alt mr-3"></i>Đăng Xuất</a>
+                </div>
+            </div>
+        </div>
+        <div class="overlay" id="overlay"></div>
+    </nav>
+
+    <!-- Invoice Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Hóa Đơn</h2>
+            <div id="invoice-not-found" class="hidden text-center text-gray-600 text-xl">Đơn hàng không tồn tại.</div>
+            <div id="invoice-content" class="space-y-8">
+                <!-- Order Info -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4">Thông Tin Đơn Hàng</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <p><span class="font-semibold">Mã Đơn Hàng:</span> <span id="order-id"></span></p>
+                        <p><span class="font-semibold">Ngày Đặt Hàng:</span> <span id="order-date"></span></p>
+                        <p><span class="font-semibold">Trạng Thái:</span> <span id="order-status"></span></p>
+                        <p><span class="font-semibold">Phương Thức Thanh Toán:</span> <span id="payment-method"></span></p>
+                    </div>
+                </div>
+                <!-- Customer Info -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4">Thông Tin Khách Hàng</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <p><span class="font-semibold">Họ và Tên:</span> <span id="customer-name"></span></p>
+                        <p><span class="font-semibold">Số Điện Thoại:</span> <span id="customer-phone"></span></p>
+                        <p><span class="font-semibold">Địa Chỉ:</span> <span id="customer-address"></span></p>
+                        <p><span class="font-semibold">Ghi Chú:</span> <span id="customer-notes"></span></p>
+                    </div>
+                </div>
+                <!-- Order Items -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4">Chi Tiết Sản Phẩm</h3>
+                    <div class="invoice-table">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b">
+                                    <th class="py-4 px-2">Sản Phẩm</th>
+                                    <th class="py-4 px-2">Màu Sắc</th>
+                                    <th class="py-4 px-2">Dung Lượng</th>
+                                    <th class="py-4 px-2">Số Lượng</th>
+                                    <th class="py-4 px-2">Giá</th>
+                                    <th class="py-4 px-2">Tổng</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoice-items"></tbody>
+                        </table>
+                    </div>
+                    <div class="invoice-grid grid gap-4"></div>
+                    <div class="mt-6 text-xl font-bold text-right">Tổng cộng: <span id="invoice-total">0 ₫</span></div>
+                </div>
+                <!-- Actions -->
+                <div class="text-center space-x-4">
+                    <button id="print-invoice" class="action-btn bg-blue-600 text-white px-6 py-3 rounded-full font-semibold">In Hóa Đơn</button>
+                    <a href="order-history.html" class="action-btn bg-blue-600 text-white px-6 py-3 rounded-full font-semibold">Quay Lại Lịch Sử Đơn Hàng</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer bg-gray-900 text-white py-6">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="w-10 h-10 object-contain">
+                <span class="font-bold text-xl">ProMax Store</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <div class="flex space-x-6 text-xl mb-4">
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="text-sm text-gray-400">
+                    <p>&copy; 2025 ProMax Store. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const closeDrawer = document.getElementById('close-drawer');
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('overlay');
+            const searchToggle = document.getElementById('search-toggle');
+            const searchInput = document.querySelector('.search-input');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const navbar = document.querySelector('.navbar');
+            const invoiceContent = document.getElementById('invoice-content');
+            const invoiceNotFound = document.getElementById('invoice-not-found');
+            const orderIdElement = document.getElementById('order-id');
+            const orderDateElement = document.getElementById('order-date');
+            const orderStatusElement = document.getElementById('order-status');
+            const paymentMethodElement = document.getElementById('payment-method');
+            const customerNameElement = document.getElementById('customer-name');
+            const customerPhoneElement = document.getElementById('customer-phone');
+            const customerAddressElement = document.getElementById('customer-address');
+            const customerNotesElement = document.getElementById('customer-notes');
+            const invoiceItemsContainer = document.getElementById('invoice-items');
+            const invoiceGridContainer = document.querySelector('.invoice-grid');
+            const invoiceTotalElement = document.getElementById('invoice-total');
+            const printInvoiceBtn = document.getElementById('print-invoice');
+
+            // Drawer menu toggle
+            menuToggle.addEventListener('click', () => {
+                drawer.classList.add('active');
+                overlay.classList.add('active');
+            });
+            
+            closeDrawer.addEventListener('click', () => {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            overlay.addEventListener('click', () => {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    drawer.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            });
+
+            // Search input toggle
+            searchToggle.addEventListener('click', () => {
+                searchInput.classList.toggle('active');
+                if (searchInput.classList.contains('active')) {
+                    searchInput.focus();
+                }
+            });
+
+            // Scroll effect for navbar
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Format price to VND
+            function formatPrice(price) {
+                return (price * 25000).toLocaleString('vi-VN') + ' ₫';
+            }
+
+            // Format date
+            function formatDate(isoString) {
+                const date = new Date(isoString);
+                return date.toLocaleString('vi-VN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                });
+            }
+
+            // Get orderId from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('orderId');
+
+            // Load orders from localStorage
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const order = orders.find(o => o.id === orderId);
+
+            // Display invoice
+            if (!order) {
+                invoiceContent.classList.add('hidden');
+                invoiceNotFound.classList.remove('hidden');
+                return;
+            }
+
+            invoiceContent.classList.remove('hidden');
+            invoiceNotFound.classList.add('hidden');
+
+            // Populate order info
+            orderIdElement.textContent = order.id;
+            orderDateElement.textContent = formatDate(order.date);
+            orderStatusElement.textContent = order.status === 'pending' ? 'Đang xử lý' : order.status;
+            paymentMethodElement.textContent = order.paymentMethod === 'COD' ? 'Thanh toán khi nhận hàng' : 
+                                             order.paymentMethod === 'Bank Transfer' ? 'Chuyển khoản ngân hàng' : 'Ví điện tử Momo';
+
+            // Populate customer info
+            customerNameElement.textContent = order.customer.name;
+            customerPhoneElement.textContent = order.customer.phone;
+            customerAddressElement.textContent = order.customer.address;
+            customerNotesElement.textContent = order.customer.notes || 'Không có';
+
+            // Populate order items
+            let total = 0;
+            order.items.forEach(item => {
+                const itemTotal = item.price * item.quantity * 25000;
+                total += itemTotal;
+
+                // Table row for desktop
+                const row = document.createElement('tr');
+                row.className = 'invoice-item border-b';
+                row.innerHTML = `
+                    <td class="py-4 px-2 flex items-center">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-contain mr-4">
+                        <span>${item.name}</span>
+                    </td>
+                    <td class="py-4 px-2">${item.color}</td>
+                    <td class="py-4 px-2">${item.storage}</td>
+                    <td class="py-4 px-2">${item.quantity}</td>
+                    <td class="py-4 px-2">${formatPrice(item.price)}</td>
+                    <td class="py-4 px-2">${formatPrice(itemTotal / 25000)}</td>
+                `;
+                invoiceItemsContainer.appendChild(row);
+
+                // Grid item for mobile
+                const gridItem = document.createElement('div');
+                gridItem.className = 'invoice-item bg-white p-4 rounded-lg shadow';
+                gridItem.innerHTML = `
+                    <div class="flex items-center mb-4">
+                        <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-contain mr-4">
+                        <div>
+                            <h3 class="font-bold">${item.name}</h3>
+                            <p class="text-gray-600">${item.color}, ${item.storage}</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span>Giá: ${formatPrice(item.price)}</span>
+                        <span>Số lượng: ${item.quantity}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Tổng: ${formatPrice(itemTotal / 25000)}</span>
+                    </div>
+                `;
+                invoiceGridContainer.appendChild(gridItem);
+            });
+
+            invoiceTotalElement.textContent = formatPrice(total / 25000);
+
+            // Print invoice
+            printInvoiceBtn.addEventListener('click', () => {
+                window.print();
+            });
+        });
+    </script>
+</body>
+</html>

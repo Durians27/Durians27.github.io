@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Sản Phẩm - ProMax Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #87CEEB;
+        }
+        
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-img:hover {
+            transform: rotate(10deg) scale(1.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+        
+        .navbar {
+            background-color: rgba(44, 62, 80, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: #2c3e50;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-link {
+            position: relative;
+            padding: 14px 24px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .nav-link:hover::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 2px;
+            background-color: #fff;
+        }
+        
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -340px;
+            width: 340px;
+            height: 100%;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"%3E%3Cpath d="M20 0 Q30 10 20 20 Q10 30 20 40 Q30 30 40 20 Q30 10 20 0 Z"/%3E%3C/svg%3E');
+            background-color: #2c3e50;
+            transition: left 0.4s ease, transform 0.4s ease;
+            z-index: 1000;
+            padding: 40px 24px;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .drawer.active {
+            left: 0;
+            transform: scale(1.02);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease;
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-input {
+            width: 0;
+            opacity: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input.active {
+            width: 300px;
+            opacity: 1;
+            padding: 8px 16px;
+        }
+        
+        .footer {
+            background-color: #1F2937;
+            transition: background-color 0.3s ease;
+        }
+        
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, border 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-option.active {
+            border: 2px solid #87CEEB;
+        }
+        
+        .storage-option {
+            transition: all 0.2s;
+        }
+        
+        .storage-option:hover {
+            background-color: #000;
+            color: white;
+        }
+        
+        .storage-option.active {
+            background-color: #000;
+            color: white;
+        }
+        
+        .add-to-cart, .buy-now {
+            transition: all 0.3s ease;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #1a1a1a;
+        }
+        
+        .buy-now:hover {
+            background-color: #1E90FF;
+        }
+        
+        @keyframes slideInLink {
+            from { transform: translateX(-30px) scale(0.95); opacity: 0; }
+            to { transform: translateX(0) scale(1); opacity: 1; }
+        }
+        
+        @keyframes slideInIcon {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .drawer.active .nav-link {
+            animation: slideInLink 0.4s ease forwards;
+        }
+        .drawer.active .nav-link:nth-child(1) { animation-delay: 0.1s; }
+        .drawer.active .nav-link:nth-child(2) { animation-delay: 0.2s; }
+        .drawer.active .nav-link:nth-child(3) { animation-delay: 0.3s; }
+        .drawer.active .nav-link:nth-child(4) { animation-delay: 0.4s; }
+        .drawer.active .nav-link:nth-child(5) { animation-delay: 0.5s; }
+        .drawer.active .nav-link:nth-child(6) { animation-delay: 0.6s; }
+        .drawer.active .nav-link:nth-child(7) { animation-delay: 0.7s; }
+        .drawer.active .nav-link:nth-child(8) { animation-delay: 0.8s; }
+        
+        .navbar .menu-toggle, .navbar .fa-search, .navbar .fa-shopping-bag {
+            animation: slideInIcon 0.6s ease forwards;
+        }
+        .navbar .menu-toggle { animation-delay: 0.2s; }
+        .navbar .fa-search { animation-delay: 0.4s; }
+        .navbar .fa-shopping-bag { animation-delay: 0.5s; }
+        
+        @media (max-width: 768px) {
+            .search-input.active {
+                width: 100%;
+            }
+            .product-details-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar text-white py-6 px-12 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-10">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                <span class="font-bold text-3xl">ProMax Store</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="search-container">
+                    <i class="fas fa-search hover:text-gray-300 cursor-pointer text-xl" id="search-toggle"></i>
+                    <input type="text" id="search-input" class="search-input bg-gray-800 border border-gray-700 rounded-full text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tìm kiếm iPhone...">
+                </div>
+                <a href="cart.html"><i class="fas fa-shopping-bag hover:text-gray-300 cursor-pointer text-xl"></i></a>
+            </div>
+        </div>
+        <!-- Drawer Menu -->
+        <div class="drawer" id="drawer">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between mb-10">
+                    <img src="../images/logo1.png" alt="ProMax Store Logo" class="logo-img">
+                    <button class="text-white" id="close-drawer">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col space-y-6 flex-grow">
+                    <a href="user-home.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-home mr-3"></i>Trang Chủ</a>
+                    <a href="products.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-mobile-alt mr-3"></i>Sản Phẩm</a>
+                    <a href="index.html#features" class="nav-link text-white hover:text-gray-200"><i class="fas fa-star mr-3"></i>Tính Năng</a>
+                    <a href="index.html#contact" class="nav-link text-white hover:text-gray-200"><i class="fas fa-envelope mr-3"></i>Liên Hệ</a>
+                    <a href="profile.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-user mr-3"></i>Thông Tin Tài Khoản</a>
+                    <a href="order-history.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-history mr-3"></i>Lịch Sử Đơn Hàng</a>
+                    <a href="order-tracking.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-truck mr-3"></i>Theo Dõi Đơn Hàng</a>
+                    <a href="logout.html" class="nav-link text-white hover:text-gray-200"><i class="fas fa-sign-out-alt mr-3"></i>Đăng Xuất</a>
+                </div>
+            </div>
+        </div>
+        <div class="overlay" id="overlay"></div>
+    </nav>
+
+    <!-- Product Details Section -->
+    <section id="product-details" class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div id="product-details-container" class="product-details-container flex flex-col md:flex-row gap-12">
+                <!-- Product details will be populated dynamically -->
+            </div>
+            <div id="error-message" class="text-center text-red-600 mt-8 hidden">
+                Sản phẩm không tồn tại. <a href="products.html" class="text-blue-600 hover:underline">Quay lại danh sách sản phẩm</a>.
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer bg-gray-900 text-white py-6">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="../images/logo1.png" alt="ProMax Store Logo" class="w-10 h-10 object-contain">
+                <span class="font-bold text-xl">ProMax Store</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <div class="flex space-x-6 text-xl mb-4">
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-gray-300 transition"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="text-sm text-gray-400">
+                    <p>&copy; 2025 ProMax Store. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const closeDrawer = document.getElementById('close-drawer');
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('overlay');
+            const searchToggle = document.getElementById('search-toggle');
+            const searchInput = document.getElementById('search-input');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const navbar = document.querySelector('.navbar');
+            const productDetailsContainer = document.getElementById('product-details-container');
+            const errorMessage = document.getElementById('error-message');
+
+            // Product data
+            const products = [
+                {
+                    id: '11-pro-max',
+                    name: 'iPhone 11 Pro Max',
+                    price: 699, // USD
+                    priceVND: (699 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/11-pro-max-midnight-green.png',
+                    description: 'iPhone 11 Pro Max với chip A13 Bionic, hệ thống 3 camera 12MP, và màn hình Super Retina XDR 6.5 inch.',
+                    colors: ['Midnight Green', 'Space Gray', 'Silver', 'Gold'],
+                    storage: ['64GB', '256GB', '512GB'],
+                    detailedDescription: `
+                        <h3 class="text-2xl font-bold mb-4">Tính Năng Nổi Bật</h3>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>Chip A13 Bionic:</strong> Hiệu năng mạnh mẽ, hỗ trợ học máy.</li>
+                            <li><strong>Camera ba ống kính:</strong> 12MP chính, ultra-wide, telephoto, Night mode.</li>
+                            <li><strong>Màn hình chất lượng:</strong> Độ sáng tối đa 1200 nits, HDR.</li>
+                            <li><strong>Pin ấn tượng:</strong> Thời lượng pin 18 giờ phát video.</li>
+                            <li><strong>Thiết kế bền:</strong> Mặt kính cường lực, chống nước IP68.</li>
+                        </ul>
+                        <h3 class="text-2xl font-bold mt-6 mb-4">Thông Số Kỹ Thuật</h3>
+                        <table class="w-full border-collapse">
+                            <tr class="border-b"><td class="py-2 font-semibold">Màn hình:</td><td>6.5 inch, Super Retina XDR</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Chip:</td><td>A13 Bionic, 6-core CPU, 4-core GPU</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Camera:</td><td>12MP chính, 12MP ultra-wide, 12MP telephoto 2x</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Pin:</td><td>Lên đến 18 giờ phát video</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Hệ điều hành:</td><td>iOS 13 (có thể nâng cấp iOS 19)</td></tr>
+                        </table>
+                    `
+                },
+                {
+                    id: '12-pro-max',
+                    name: 'iPhone 12 Pro Max',
+                    price: 799, // USD
+                    priceVND: (799 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/12-pro-max-pacific-blue.png',
+                    description: 'iPhone 12 Pro Max với chip A14 Bionic, hệ thống 3 camera 12MP, và màn hình Super Retina XDR 6.7 inch.',
+                    colors: ['Pacific Blue', 'Gold', 'Graphite', 'Silver'],
+                    storage: ['128GB', '256GB', '512GB'],
+                    detailedDescription: `
+                        <h3 class="text-2xl font-bold mb-4">Tính Năng Nổi Bật</h3>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>Chip A14 Bionic:</strong> Chip 5nm đầu tiên, hiệu năng mạnh mẽ.</li>
+                            <li><strong>Camera Pro:</strong> Hệ thống 3 camera 12MP, hỗ trợ Night mode, LiDAR Scanner.</li>
+                            <li><strong>Màn hình lớn:</strong> Độ sáng tối đa 1200 nits, HDR.</li>
+                            <li><strong>Pin lâu dài:</strong> Thời lượng pin 20 giờ phát video.</li>
+                            <li><strong>Hỗ trợ 5G:</strong> Tốc độ tải xuống nhanh, kết nối ổn định.</li>
+                        </ul>
+                        <h3 class="text-2xl font-bold mt-6 mb-4">Thông Số Kỹ Thuật</h3>
+                        <table class="w-full border-collapse">
+                            <tr class="border-b"><td class="py-2 font-semibold">Màn hình:</td><td>6.7 inch, Super Retina XDR</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Chip:</td><td>A14 Bionic, 6-core CPU, 4-core GPU</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Camera:</td><td>12MP chính, 12MP ultra-wide, 12MP telephoto 2.5x</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Pin:</td><td>Lên đến 20 giờ phát video</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Hệ điều hành:</td><td>iOS 14 (có thể nâng cấp iOS 19)</td></tr>
+                        </table>
+                    `
+                },
+                {
+                    id: '13-pro-max',
+                    name: 'iPhone 13 Pro Max',
+                    price: 899, // USD
+                    priceVND: (899 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/13-pro-max-sierra-blue.png',
+                    description: 'iPhone 13 Pro Max với chip A15 Bionic, hệ thống 3 camera 12MP, và màn hình Super Retina XDR 6.7 inch.',
+                    colors: ['Sierra Blue', 'Graphite', 'Silver', 'Gold'],
+                    storage: ['128GB', '256GB', '512GB', '1TB'],
+                    detailedDescription: `
+                        <h3 class="text-2xl font-bold mb-4">Tính Năng Nổi Bật</h3>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>Chip A15 Bionic:</strong> Hiệu năng cao, hỗ trợ 5G tốc độ nhanh.</li>
+                            <li><strong>Camera Pro:</strong> Hệ thống 3 camera 12MP, hỗ trợ Cinematic mode, chụp macro.</li>
+                            <li><strong>Màn hình ProMotion:</strong> Tần số quét 120Hz, độ sáng tối đa 1200 nits.</li>
+                            <li><strong>Pin vượt trội:</strong> Thời lượng pin 28 giờ phát video.</li>
+                            <li><strong>Thiết kế bền bỉ:</strong> Mặt kính Ceramic Shield, chống nước IP68.</li>
+                        </ul>
+                        <h3 class="text-2xl font-bold mt-6 mb-4">Thông Số Kỹ Thuật</h3>
+                        <table class="w-full border-collapse">
+                            <tr class="border-b"><td class="py-2 font-semibold">Màn hình:</td><td>6.7 inch, Super Retina XDR, 120Hz</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Chip:</td><td>A15 Bionic, 6-core CPU, 5-core GPU</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Camera:</td><td>12MP chính, 12MP ultra-wide, 12MP telephoto 3x</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Pin:</td><td>Lên đến 28 giờ phát video</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Hệ điều hành:</td><td>iOS 15 (có thể nâng cấp iOS 19)</td></tr>
+                        </table>
+                    `
+                },
+                {
+                    id: '14-pro-max',
+                    name: 'iPhone 14 Pro Max',
+                    price: 899, // USD
+                    priceVND: (899 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/14-pro-max-deep-purple.png',
+                    description: 'iPhone 14 Pro Max với chip A16 Bionic, hệ thống 3 camera 48MP, và Dynamic Island.',
+                    colors: ['Deep Purple', 'Space Black', 'Silver', 'Gold'],
+                    storage: ['128GB', '256GB', '512GB', '1TB'],
+                    detailedDescription: `
+                        <h3 class="text-2xl font-bold mb-4">Tính Năng Nổi Bật</h3>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>Dynamic Island:</strong> Giao diện tương tác mới thay cho notch.</li>
+                            <li><strong>Chip A16 Bionic:</strong> Hiệu năng mạnh mẽ, tiết kiệm năng lượng.</li>
+                            <li><strong>Camera 48MP:</strong> Chụp ảnh chi tiết cao, quay video 4K HDR.</li>
+                            <li><strong>Màn hình ProMotion:</strong> Tần số quét 120Hz, Always-On Display.</li>
+                            <li><strong>Pin lâu dài:</strong> Thời lượng pin 25 giờ phát video.</li>
+                            <li><strong>An toàn:</strong> Phát hiện va chạm, SOS khẩn cấp qua vệ tinh.</li>
+                        </ul>
+                        <h3 class="text-2xl font-bold mt-6 mb-4">Thông Số Kỹ Thuật</h3>
+                        <table class="w-full border-collapse">
+                            <tr class="border-b"><td class="py-2 font-semibold">Màn hình:</td><td>6.7 inch, Super Retina XDR, 120Hz</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Chip:</td><td>A16 Bionic, 6-core CPU, 5-core GPU</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Camera:</td><td>48MP chính, 12MP ultra-wide, 12MP telephoto 3x</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Pin:</td><td>Lên đến 25 giờ phát video</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Hệ điều hành:</td><td>iOS 16 (có thể nâng cấp iOS 19)</td></tr>
+                        </table>
+                    `
+                },
+                {
+                    id: '15-pro-max',
+                    name: 'iPhone 15 Pro Max',
+                    price: 1099, // USD
+                    priceVND: (1099 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/15-pro-max-blue-titanium.png',
+                    description: 'iPhone 15 Pro Max với chip A17 Pro, khung titan, và camera 48MP.',
+                    colors: ['Black Titanium', 'White Titanium', 'Blue Titanium', 'Natural Titanium'],
+                    storage: ['256GB', '512GB', '1TB'],
+                    detailedDescription: `
+                        <h3 class="text-2xl font-bold mb-4">Tính Năng Nổi Bật</h3>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>Thiết kế Titanium:</strong> Khung titanium nhẹ và bền, mặt kính Ceramic Shield.</li>
+                            <li><strong>Chip A17 Pro:</strong> Hiệu năng mạnh mẽ, hỗ trợ chơi game console-grade.</li>
+                            <li><strong>Camera 48MP:</strong> Hệ thống camera với zoom quang học 5x, chế độ chụp đêm cải tiến.</li>
+                            <li><strong>Màn hình ProMotion:</strong> Tần số quét 120Hz, độ sáng tối đa 1600 nits.</li>
+                            <li><strong>Pin bền bỉ:</strong> Thời lượng pin 27 giờ phát video, hỗ trợ sạc nhanh.</li>
+                            <li><strong>Cổng USB-C:</strong> Tốc độ truyền dữ liệu cao, tương thích đa thiết bị.</li>
+                        </ul>
+                        <h3 class="text-2xl font-bold mt-6 mb-4">Thông Số Kỹ Thuật</h3>
+                        <table class="w-full border-collapse">
+                            <tr class="border-b"><td class="py-2 font-semibold">Màn hình:</td><td>6.7 inch, Super Retina XDR, 120Hz</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Chip:</td><td>A17 Pro, 6-core CPU, 6-core GPU</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Camera:</td><td>48MP chính, 12MP ultra-wide, 12MP telephoto 5x</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Pin:</td><td>Lên đến 27 giờ phát video</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Hệ điều hành:</td><td>iOS 18 (có thể nâng cấp iOS 19)</td></tr>
+                        </table>
+                    `
+                },
+                {
+                    id: '16-pro-max',
+                    name: 'iPhone 16 Pro Max',
+                    price: 1199, // USD
+                    priceVND: (1199 * 25000).toLocaleString('vi-VN'), // VND
+                    image: '../images/16-pro-max-desert-titanium.png',
+                    description: 'iPhone 16 Pro Max với chip A18 Pro, camera 48MP Ultra Wide, và màn hình 6.9 inch.',
+                    colors: ['Black Titanium', 'White Titanium', 'Natural Titanium', 'Desert Titanium'],
+                    storage: ['256GB', '512GB', '1TB'],
+                    detailedDescription: `
+                        <h3 class="text-2xl font-bold mb-4">Tính Năng Nổi Bật</h3>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>Thiết kế Titanium cao cấp:</strong> Vỏ titanium nhẹ, bền, với viền mỏng hơn và mặt kính Ceramic Shield cải tiến.</li>
+                            <li><strong>Chip A18 Pro:</strong> Hiệu năng vượt trội, hỗ trợ AI nâng cao và tiết kiệm năng lượng.</li>
+                            <li><strong>Hệ thống camera 48MP:</strong> Camera chính với cảm biến lớn, hỗ trợ quay video 8K, camera telephoto 5x zoom.</li>
+                            <li><strong>Màn hình ProMotion 120Hz:</strong> Độ sáng tối đa 2000 nits, hỗ trợ Always-On Display.</li>
+                            <li><strong>Pin cải tiến:</strong> Thời lượng pin lên đến 29 giờ phát video, sạc nhanh 50% trong 30 phút.</li>
+                            <li><strong>iOS 19:</strong> Giao diện tùy chỉnh sâu, tích hợp Apple Intelligence.</li>
+                        </ul>
+                        <h3 class="text-2xl font-bold mt-6 mb-4">Thông Số Kỹ Thuật</h3>
+                        <table class="w-full border-collapse">
+                            <tr class="border-b"><td class="py-2 font-semibold">Màn hình:</td><td>6.9 inch, Super Retina XDR, 120Hz</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Chip:</td><td>A18 Pro, 6-core CPU, 6-core GPU</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Camera:</td><td>48MP chính, 12MP ultra-wide, 12MP telephoto 5x</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Pin:</td><td>Lên đến 29 giờ phát video</td></tr>
+                            <tr class="border-b"><td class="py-2 font-semibold">Hệ điều hành:</td><td>iOS 19</td></tr>
+                        </table>
+                    `
+                }
+            ];
+
+            // Drawer menu toggle
+            menuToggle.addEventListener('click', () => {
+                drawer.classList.add('active');
+                overlay.classList.add('active');
+            });
+            
+            closeDrawer.addEventListener('click', () => {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            overlay.addEventListener('click', () => {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    drawer.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            });
+
+            // Search input toggle
+            searchToggle.addEventListener('click', () => {
+                searchInput.classList.toggle('active');
+                if (searchInput.classList.contains('active')) {
+                    searchInput.focus();
+                }
+            });
+
+            // Scroll effect for navbar
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Get product ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            const product = products.find(p => p.id === productId);
+
+            // Add to Cart functionality
+            function addToCart(productId, color, storage) {
+                const product = products.find(p => p.id === productId);
+                if (!product) return;
+
+                const cartItem = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: `../images/${product.id}-${color.toLowerCase().replace(/\s+/g, '-')}.png`,
+                    color: color,
+                    storage: storage,
+                    quantity: 1
+                };
+
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const existingItemIndex = cart.findIndex(item => 
+                    item.id === cartItem.id && item.color === cartItem.color && item.storage === cartItem.storage
+                );
+
+                if (existingItemIndex !== -1) {
+                    cart[existingItemIndex].quantity += 1;
+                } else {
+                    cart.push(cartItem);
+                }
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+                alert(`${product.name} (${color}, ${storage}) đã được thêm vào giỏ hàng!`);
+            }
+
+            // Render product details
+            function renderProductDetails() {
+                if (!product) {
+                    errorMessage.classList.remove('hidden');
+                    productDetailsContainer.classList.add('hidden');
+                    return;
+                }
+
+                errorMessage.classList.add('hidden');
+                productDetailsContainer.classList.remove('hidden');
+
+                // Generate color options HTML
+                const colorOptions = product.colors.map((color, index) => `
+                    <div class="color-option ${index === 0 ? 'active' : ''} mr-2 cursor-pointer" 
+                         style="background-color: ${getColorHex(color)};" 
+                         title="${color}" 
+                         data-color="${color}">
+                    </div>
+                `).join('');
+
+                // Generate storage options HTML
+                const storageOptions = product.storage.map((storage, index) => `
+                    <div class="storage-option border border-gray-300 px-3 py-1 rounded text-sm cursor-pointer ${index === 0 ? 'active' : ''}" 
+                         data-storage="${storage}">
+                        ${storage}
+                    </div>
+                `).join('');
+
+                productDetailsContainer.innerHTML = `
+                    <div class="md:w-1/2">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-96 object-contain mb-6 product-image" data-id="${product.id}">
+                    </div>
+                    <div class="md:w-1/2">
+                        <h2 class="text-3xl font-bold mb-4">${product.name}</h2>
+                        <p class="text-gray-600 mb-4">${product.description}</p>
+                        <span class="text-2xl font-bold mb-6 block">Từ ${product.priceVND} ₫</span>
+                        <h3 class="text-lg font-semibold mb-2">Chọn Màu Sắc</h3>
+                        <div class="flex mb-6 color-options">
+                            ${colorOptions}
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Chọn Dung Lượng</h3>
+                        <div class="flex space-x-2 mb-6 storage-options">
+                            ${storageOptions}
+                        </div>
+                        <div class="flex space-x-4">
+                            <button class="add-to-cart bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition" data-id="${product.id}">Thêm vào Giỏ</button>
+                            <a href="cart.html?id=${product.id}" class="buy-now bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition" data-id="${product.id}">Mua Ngay</a>
+                        </div>
+                        <div class="mt-8">
+                            ${product.detailedDescription}
+                        </div>
+                    </div>
+                `;
+
+                // Color selection
+                const colorOptionsElements = productDetailsContainer.querySelectorAll('.color-option');
+                let selectedColor = product.colors[0];
+                colorOptionsElements.forEach(option => {
+                    option.addEventListener('click', () => {
+                        colorOptionsElements.forEach(opt => opt.classList.remove('active'));
+                        option.classList.add('active');
+                        selectedColor = option.getAttribute('data-color');
+                        const image = productDetailsContainer.querySelector('.product-image');
+                        image.src = `../images/${product.id}-${selectedColor.toLowerCase().replace(/\s+/g, '-')}.png`;
+                    });
+                });
+
+                // Storage selection
+                const storageOptionsElements = productDetailsContainer.querySelectorAll('.storage-option');
+                let selectedStorage = product.storage[0];
+                storageOptionsElements.forEach(option => {
+                    option.addEventListener('click', () => {
+                        storageOptionsElements.forEach(opt => opt.classList.remove('active'));
+                        option.classList.add('active');
+                        selectedStorage = option.getAttribute('data-storage');
+                    });
+                });
+
+                // Add to Cart button
+                productDetailsContainer.querySelector('.add-to-cart').addEventListener('click', () => {
+                    addToCart(product.id, selectedColor, selectedStorage);
+                });
+            }
+
+            // Helper function to map color names to hex codes
+            function getColorHex(color) {
+                const colorMap = {
+                    'Midnight Green': '#2d4739',
+                    'Space Gray': '#4b5563',
+                    'Silver': '#e5e7eb',
+                    'Gold': '#facc15',
+                    'Pacific Blue': '#1e40af',
+                    'Graphite': '#4b5563',
+                    'Sierra Blue': '#60a5fa',
+                    'Deep Purple': '#4c1d95',
+                    'Space Black': '#1f2937',
+                    'Black Titanium': '#2d2d2d',
+                    'White Titanium': '#f5f5f5',
+                    'Blue Titanium': '#1e3a8a',
+                    'Natural Titanium': '#6b7280',
+                    'Desert Titanium': '#b89778'
+                };
+                return colorMap[color] || '#000000';
+            }
+
+            // Render product details on load
+            renderProductDetails();
+        });
+    </script>
+</body>
+</html>

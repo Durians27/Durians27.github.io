@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Sơ Cá Nhân - ProMax Store</title>
+    <!-- Tải Tailwind CSS từ CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tải Font Awesome cho các biểu tượng -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tải font Inter từ Google Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #2c3e50 100%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header .logo img {
+            width: 80px;
+            height: auto;
+        }
+
+        header nav a {
+            color: #fff;
+            margin-left: 1.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        header nav a:hover {
+            color: #5c97d6;
+        }
+
+        /* Container chính */
+        .container {
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+                        0 10px 10px rgba(0,0,0,0.22);
+            width: 800px;
+            max-width: 90%;
+            margin: 2rem auto;
+            padding: 2rem;
+            color: #fff;
+        }
+
+        /* Form styles */
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-group input:disabled {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: 20px;
+            border: 1px solid #5c97d6;
+            background: linear-gradient(to right, #5c97d6, #3b74b1);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 12px 30px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 1rem;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 15px rgba(92, 151, 214, 0.8);
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-secondary {
+            border: 1px solid #0a4d8c;
+            background: #0a4d8c;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 0 15px rgba(10, 77, 140, 0.8);
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="../images/logo1.png" alt="ProMax Store Logo">
+        </div>
+        <nav>
+            <a href="user-home.html">Trang Chủ</a>
+            <a href="#" id="logout">Đăng Xuất</a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Thông Tin Cá Nhân -->
+        <div class="form-section">
+            <h2>Thông Tin Cá Nhân</h2>
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="name">Họ và Tên</label>
+                    <input type="text" id="name" placeholder="Nhập họ và tên" disabled required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Nhập email" disabled required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Số Điện Thoại</label>
+                    <input type="tel" id="phone" placeholder="Nhập số điện thoại" disabled required>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn" id="editProfile">Chỉnh Sửa</button>
+                    <button type="submit" class="btn" id="saveProfile" style="display: none;">Lưu</button>
+                    <button type="button" class="btn btn-secondary" id="cancelEdit" style="display: none;">Hủy</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Đổi Mật Khẩu -->
+        <div class="form-section">
+            <h2>Đổi Mật Khẩu</h2>
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label for="currentPassword">Mật Khẩu Hiện Tại</label>
+                    <input type="password" id="currentPassword" placeholder="Nhập mật khẩu hiện tại" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Mật Khẩu Mới</label>
+                    <input type="password" id="newPassword" placeholder="Nhập mật khẩu mới" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Xác Nhận Mật Khẩu</label>
+                    <input type="password" id="confirmPassword" placeholder="Xác nhận mật khẩu mới" required>
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn">Đổi Mật Khẩu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const profileForm = document.getElementById('profileForm');
+        const passwordForm = document.getElementById('passwordForm');
+        const editProfileBtn = document.getElementById('editProfile');
+        const saveProfileBtn = document.getElementById('saveProfile');
+        const cancelEditBtn = document.getElementById('cancelEdit');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const currentPasswordInput = document.getElementById('currentPassword');
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const logoutBtn = document.getElementById('logout');
+
+        // Load user data from localStorage (mock)
+        let user = JSON.parse(localStorage.getItem('user')) || {
+            name: 'Nguyễn Thị Thanh Như',
+            email: 'gotn27122125@gmail.com',
+            phone: '0326623631',
+            password: 'password123'
+        };
+
+        // Display user data
+        function loadUserData() {
+            nameInput.value = user.name;
+            emailInput.value = user.email;
+            phoneInput.value = user.phone;
+        }
+
+        loadUserData();
+
+        // Toggle edit mode
+        editProfileBtn.addEventListener('click', () => {
+            nameInput.disabled = false;
+            emailInput.disabled = false;
+            phoneInput.disabled = false;
+            editProfileBtn.style.display = 'none';
+            saveProfileBtn.style.display = 'inline-block';
+            cancelEditBtn.style.display = 'inline-block';
+        });
+
+        // Cancel edit
+        cancelEditBtn.addEventListener('click', () => {
+            nameInput.disabled = true;
+            emailInput.disabled = true;
+            phoneInput.disabled = true;
+            editProfileBtn.style.display = 'inline-block';
+            saveProfileBtn.style.display = 'none';
+            cancelEditBtn.style.display = 'none';
+            loadUserData();
+        });
+
+        // Save profile changes
+        profileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!emailInput.value.includes('@') || !emailInput.value.includes('.')) {
+                alert('Email không hợp lệ!');
+                return;
+            }
+            if (phoneInput.value.length < 10 || isNaN(phoneInput.value)) {
+                alert('Số điện thoại không hợp lệ!');
+                return;
+            }
+            user.name = nameInput.value;
+            user.email = emailInput.value;
+            user.phone = phoneInput.value;
+            localStorage.setItem('user', JSON.stringify(user));
+            alert('Cập nhật thông tin thành công!');
+            nameInput.disabled = true;
+            emailInput.disabled = true;
+            phoneInput.disabled = true;
+            editProfileBtn.style.display = 'inline-block';
+            saveProfileBtn.style.display = 'none';
+            cancelEditBtn.style.display = 'none';
+        });
+
+        // Change password
+        passwordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (currentPasswordInput.value !== user.password) {
+                alert('Mật khẩu hiện tại không đúng!');
+                return;
+            }
+            if (newPasswordInput.value !== confirmPasswordInput.value) {
+                alert('Mật khẩu mới và xác nhận mật khẩu không khớp!');
+                return;
+            }
+            if (newPasswordInput.value.length < 6) {
+                alert('Mật khẩu mới phải có ít nhất 6 ký tự!');
+                return;
+            }
+            user.password = newPasswordInput.value;
+            localStorage.setItem('user', JSON.stringify(user));
+            alert('Đổi mật khẩu thành công!');
+            passwordForm.reset();
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
